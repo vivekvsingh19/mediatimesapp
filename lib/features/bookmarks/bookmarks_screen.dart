@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import '../../providers/bookmark_provider.dart';
 import '../../core/constants/api_constants.dart';
 
+import 'package:lucide_icons/lucide_icons.dart';
+
 class BookmarksScreen extends ConsumerWidget {
   const BookmarksScreen({super.key});
 
@@ -13,8 +15,9 @@ class BookmarksScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SAVED', style: TextStyle(fontWeight: FontWeight.bold, letterSpacing: 1.2)),
+        title: const Text('SAVED', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.2)),
         centerTitle: true,
+        elevation: 0,
       ),
       body: bookmarksState.when(
         data: (bookmarks) {
@@ -36,7 +39,7 @@ class BookmarksScreen extends ConsumerWidget {
                 ),
                 subtitle: article.category != null ? Text(article.category!.name) : null,
                 trailing: IconButton(
-                  icon: const Icon(Icons.delete_outline),
+                  icon: const Icon(LucideIcons.trash2),
                   onPressed: () async {
                     await ref.read(bookmarkServiceProvider).removeBookmark(article.id);
                     ref.invalidate(bookmarksProvider);

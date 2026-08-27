@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:lucide_icons/lucide_icons.dart';
+
 class MainScaffold extends StatelessWidget {
   final Widget child;
 
@@ -14,10 +16,14 @@ class MainScaffold extends StatelessWidget {
         type: BottomNavigationBarType.fixed,
         currentIndex: _calculateSelectedIndex(context),
         onTap: (int idx) => _onItemTapped(idx, context),
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home_outlined), activeIcon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.category_outlined), activeIcon: Icon(Icons.category), label: 'Explore'),
-          BottomNavigationBarItem(icon: Icon(Icons.bookmark_border), activeIcon: Icon(Icons.bookmark), label: 'Saved'),
+          BottomNavigationBarItem(icon: Icon(LucideIcons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(LucideIcons.layoutGrid), label: 'Explore'),
+          BottomNavigationBarItem(icon: Icon(LucideIcons.bookmark), label: 'Saved'),
         ],
       ),
     );
