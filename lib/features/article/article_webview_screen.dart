@@ -21,7 +21,13 @@ class _ArticleWebViewScreenState extends State<ArticleWebViewScreen> {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(
         NavigationDelegate(
-          onPageFinished: (String url) {
+          onPageFinished: (String url) async {
+            await _controller.runJavaScript('''
+              var style = document.createElement('style');
+              style.innerHTML = 'header, footer, nav, aside { display: none !important; } ' +
+                                'div[class*="topBannerAd"], div[class*="skinAd"], div[class*="topBar"] { display: none !important; }';
+              document.head.appendChild(style);
+            ''');
             setState(() {
               _isLoading = false;
             });
