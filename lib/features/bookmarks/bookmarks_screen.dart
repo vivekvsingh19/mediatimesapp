@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:go_router/go_router.dart';
 import '../../providers/bookmark_provider.dart';
 import '../../core/constants/api_constants.dart';
 
@@ -42,15 +42,8 @@ class BookmarksScreen extends ConsumerWidget {
                     ref.invalidate(bookmarksProvider);
                   },
                 ),
-                onTap: () async {
-                  final url = Uri.parse(ApiConstants.getFrontendArticleUrl(article.slug));
-                  if (!await launchUrl(url, mode: LaunchMode.inAppWebView)) {
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Could not open article')),
-                      );
-                    }
-                  }
+                onTap: () {
+                  context.push('/article/webview', extra: ApiConstants.getFrontendArticleUrl(article.slug));
                 },
               );
             },

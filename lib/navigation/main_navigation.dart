@@ -5,6 +5,7 @@ import '../features/navigation/main_scaffold.dart';
 import '../features/home/home_screen.dart';
 import '../features/categories/categories_screen.dart';
 import '../features/bookmarks/bookmarks_screen.dart';
+import '../features/article/article_webview_screen.dart';
 
 import '../features/search/search_screen.dart';
 
@@ -32,6 +33,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         ],
       ),
 
+      GoRoute(
+        path: '/article/webview',
+        builder: (context, state) {
+          final url = state.extra as String;
+          return ArticleWebViewScreen(url: url);
+        },
+      ),
       GoRoute(
         path: '/search',
         builder: (context, state) => const SearchScreen(),
