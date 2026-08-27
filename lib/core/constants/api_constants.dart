@@ -1,9 +1,6 @@
 class ApiConstants {
   static String get baseUrl {
-    // 127.0.0.1 works on Web/Desktop. For physical Android devices over USB,
-    // use `adb reverse tcp:3000 tcp:3000` to map this to the host machine.
-    // For Android Emulators, 10.0.2.2 is usually required if adb reverse isn't active.
-    return 'https://mediatimeslive.vercel.app/';
+    return 'https://mediatimeslive.vercel.app/api/mobile';
   }
 
   static const String news = '/news';
