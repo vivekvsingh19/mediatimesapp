@@ -6,14 +6,18 @@ import 'package:share_plus/share_plus.dart';
 import '../../../models/article.dart';
 import '../../../core/constants/api_constants.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../providers/bookmark_provider.dart';
 
-class NewsCard extends StatelessWidget {
+class NewsCard extends ConsumerWidget {
   final Article article;
 
   const NewsCard({super.key, required this.article});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isBookmarkedState = ref.watch(isBookmarkedProvider(article.id));
+    final isBookmarked = isBookmarkedState.value ?? false;
     return GestureDetector(
       onTap: () {
         context.push(
@@ -109,12 +113,21 @@ class NewsCard extends StatelessWidget {
                           ),
                           const Spacer(),
                           IconButton(
-                            icon: const Icon(
-                              LucideIcons.bookmark,
+                            icon: Icon(
+                              isBookmarked ? Icons.bookmark : LucideIcons.bookmark,
                               size: 22,
-                              color: Colors.black54,
+                              color: isBookmarked ? Theme.of(context).primaryColor : Colors.black54,
                             ),
-                            onPressed: () {},
+                            onPressed: () async {
+                              final service = ref.read(bookmarkServiceProvider);
+                              if (isBookmarked) {
+                                await service.removeBookmark(article.id);
+                              } else {
+                                await service.saveBookmark(article);
+                              }
+                              ref.invalidate(isBookmarkedProvider(article.id));
+                              ref.invalidate(bookmarksProvider);
+                            },
                             constraints: const BoxConstraints(),
                             padding: const EdgeInsets.symmetric(horizontal: 8),
                           ),
