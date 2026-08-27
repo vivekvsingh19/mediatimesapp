@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../providers/search_provider.dart';
+import '../../core/constants/api_constants.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});
@@ -72,8 +73,15 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       subtitle: article.category != null ? Text(article.category!.name) : null,
-                      onTap: () {
-                        context.push('/article/${article.slug}');
+                      onTap: () async {
+                        final url = Uri.parse(ApiConstants.getFrontendArticleUrl(article.slug));
+                        if (!await launchUrl(url, mode: LaunchMode.inAppWebView)) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Could not open article')),
+                            );
+                          }
+                        }
                       },
                     );
                   },

@@ -5,7 +5,7 @@ import '../features/navigation/main_scaffold.dart';
 import '../features/home/home_screen.dart';
 import '../features/categories/categories_screen.dart';
 import '../features/bookmarks/bookmarks_screen.dart';
-import '../features/article/article_screen.dart';
+
 import '../features/search/search_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -31,13 +31,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
         ],
       ),
-      GoRoute(
-        path: '/article/:slug',
-        builder: (context, state) {
-          final slug = state.pathParameters['slug']!;
-          return ArticleScreen(slug: slug);
-        },
-      ),
+
       GoRoute(
         path: '/search',
         builder: (context, state) => const SearchScreen(),

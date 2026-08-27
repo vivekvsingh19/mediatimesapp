@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../models/article.dart';
+import '../../../core/constants/api_constants.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class NewsCard extends StatelessWidget {
@@ -12,8 +13,15 @@ class NewsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        context.push('/article/${article.slug}');
+      onTap: () async {
+        final url = Uri.parse(ApiConstants.getFrontendArticleUrl(article.slug));
+        if (!await launchUrl(url, mode: LaunchMode.inAppWebView)) {
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Could not open article')),
+            );
+          }
+        }
       },
       child: Container(
         color: Theme.of(context).scaffoldBackgroundColor,
