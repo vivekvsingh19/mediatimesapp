@@ -28,6 +28,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final newsState = ref.watch(newsProvider(null));
 
     return Scaffold(
+      backgroundColor: Colors.grey[50],
       appBar: AppBar(
         title: Row(
           mainAxisSize: MainAxisSize.min,
