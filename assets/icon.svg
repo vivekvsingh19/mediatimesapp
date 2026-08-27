@@ -1,0 +1,12 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Red background circle -->
+  <circle cx="256" cy="256" r="256" fill="#D32F2F" />
+  
+  <!-- Lucide Newspaper Icon (centered and scaled up) -->
+  <g transform="translate(116.8, 116.8) scale(11.6)">
+    <path fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/>
+    <path fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M18 14h-8"/>
+    <path fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M15 18h-5"/>
+    <path fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M10 6h8v4h-8V6Z"/>
+  </g>
+</svg>
