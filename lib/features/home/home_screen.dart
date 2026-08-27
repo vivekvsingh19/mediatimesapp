@@ -74,7 +74,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('Unable to load news'),
+              Text('Unable to load news: $err', textAlign: TextAlign.center),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () => ref.read(newsProvider(null).notifier).fetchNews(refresh: true),
