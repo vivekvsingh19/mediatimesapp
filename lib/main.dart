@@ -21,8 +21,7 @@ class MediaTimesApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'Media Times',
       theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.light,
       routerConfig: router,
       debugShowCheckedModeBanner: false,
     );

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/news_provider.dart';
 import 'widgets/news_card.dart';
-import 'widgets/ad_slot.dart';
+
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -47,23 +47,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               scrollDirection: Axis.vertical,
               itemCount: articles.length + 1,
               onPageChanged: (index) {
-                if (index == articles.length - 2) {
+                if (index == articles.length - 1) {
                   ref.read(newsProvider(null).notifier).fetchNews();
                 }
               },
               itemBuilder: (context, index) {
-                if (index > 0 && index % 5 == 0) {
-                  return const AdSlot(position: 'feed_between_articles');
-                }
-                
-                final adCount = index ~/ 5;
-                final articleIndex = index - adCount;
-                
-                if (articleIndex >= articles.length) {
+                if (index >= articles.length) {
                   return const Center(child: CircularProgressIndicator());
                 }
                 
-                final article = articles[articleIndex];
+                final article = articles[index];
                 return NewsCard(article: article);
               },
             ),
