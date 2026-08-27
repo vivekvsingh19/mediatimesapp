@@ -19,6 +19,7 @@ dependencies:
   google_fonts: ^6.2.1
   timeago: ^3.6.1
   webview_flutter: ^4.14.1
+  lucide_icons: ^0.257.0
 
 dev_dependencies:
   flutter_test:

@@ -40,10 +40,11 @@ class _ArticleWebViewScreenState extends State<ArticleWebViewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
+        scrolledUnderElevation: 0,
+        toolbarHeight: 48,
         iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: Stack(
