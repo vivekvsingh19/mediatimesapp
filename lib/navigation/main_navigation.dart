@@ -2,7 +2,11 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../features/navigation/main_scaffold.dart';
-import '../features/dummy_screens.dart';
+import '../features/home/home_screen.dart';
+import '../features/categories/categories_screen.dart';
+import '../features/bookmarks/bookmarks_screen.dart';
+import '../features/article/article_screen.dart';
+import '../features/search/search_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(

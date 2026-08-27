@@ -7,19 +7,25 @@ import '../models/video.dart';
 class ApiService {
   final ApiClient _apiClient = ApiClient();
 
-  Future<List<Article>> getNews({int page = 1, int limit = 10, String? category}) async {
+  Future<List<Article>> getNews({
+    int page = 1,
+    int limit = 10,
+    String? category,
+  }) async {
     try {
       final response = await _apiClient.dio.get(
         ApiConstants.news,
         queryParameters: {
-          'page': page,
-          'limit': limit,
-          if (category != null) 'category': category,
+          'page': page, 
+          'limit': limit, 
+          if (category != null) 'category': category
         },
       );
-      
+
       final data = response.data['data'] as List;
-      return data.map((e) => Article.fromJson(e as Map<String, dynamic>)).toList();
+      return data
+          .map((e) => Article.fromJson(e as Map<String, dynamic>))
+          .toList();
     } catch (e) {
       throw Exception('Failed to load news: $e');
     }
@@ -38,7 +44,9 @@ class ApiService {
     try {
       final response = await _apiClient.dio.get(ApiConstants.categories);
       final data = response.data as List;
-      return data.map((e) => Category.fromJson(e as Map<String, dynamic>)).toList();
+      return data
+          .map((e) => Category.fromJson(e as Map<String, dynamic>))
+          .toList();
     } catch (e) {
       throw Exception('Failed to load categories: $e');
     }
@@ -48,32 +56,33 @@ class ApiService {
     try {
       final response = await _apiClient.dio.get(
         ApiConstants.videos,
-        queryParameters: {
-          'page': page,
-          'limit': limit,
-        },
+        queryParameters: {'page': page, 'limit': limit},
       );
-      
+
       final data = response.data['data'] as List;
-      return data.map((e) => Video.fromJson(e as Map<String, dynamic>)).toList();
+      return data
+          .map((e) => Video.fromJson(e as Map<String, dynamic>))
+          .toList();
     } catch (e) {
       throw Exception('Failed to load videos: $e');
     }
   }
 
-  Future<List<Article>> searchNews(String query, {int page = 1, int limit = 10}) async {
+  Future<List<Article>> searchNews(
+    String query, {
+    int page = 1,
+    int limit = 10,
+  }) async {
     try {
       final response = await _apiClient.dio.get(
         ApiConstants.search,
-        queryParameters: {
-          'q': query,
-          'page': page,
-          'limit': limit,
-        },
+        queryParameters: {'q': query, 'page': page, 'limit': limit},
       );
-      
+
       final data = response.data['data'] as List;
-      return data.map((e) => Article.fromJson(e as Map<String, dynamic>)).toList();
+      return data
+          .map((e) => Article.fromJson(e as Map<String, dynamic>))
+          .toList();
     } catch (e) {
       throw Exception('Failed to search news: $e');
     }
