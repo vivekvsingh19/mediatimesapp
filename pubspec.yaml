@@ -20,6 +20,7 @@ dependencies:
   timeago: ^3.6.1
   webview_flutter: ^4.14.1
   lucide_icons: ^0.257.0
+  share_plus: ^13.3.0
 
 dev_dependencies:
   flutter_test:

@@ -10,7 +10,6 @@ class ApiConstants {
   static const String ads = '/ads';
 
   static String getFrontendArticleUrl(String slug) {
-    final base = baseUrl.replaceAll('/api/mobile', '');
-    return '$base/en/article/$slug';
+    return 'https://mediatimes.live/en/article/$slug';
   }
 }

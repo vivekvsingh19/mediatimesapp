@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../../models/article.dart';
 import '../../../core/constants/api_constants.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -123,7 +124,10 @@ class NewsCard extends StatelessWidget {
                               size: 22,
                               color: Colors.black54,
                             ),
-                            onPressed: () {},
+                            onPressed: () {
+                              final url = ApiConstants.getFrontendArticleUrl(article.slug);
+                              Share.share('Check out this article: ${article.title}\n\n$url');
+                            },
                             constraints: const BoxConstraints(),
                             padding: EdgeInsets.zero,
                           ),
