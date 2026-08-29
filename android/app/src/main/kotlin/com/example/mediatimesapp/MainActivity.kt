@@ -1,4 +1,4 @@
-package com.example.mediatimesapp
+package com.mediatimes.app
 
 import io.flutter.embedding.android.FlutterActivity
 
