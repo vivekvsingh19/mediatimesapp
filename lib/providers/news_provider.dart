@@ -30,7 +30,7 @@ class NewsNotifier extends StateNotifier<AsyncValue<List<Article>>> {
 
     _isLoadingMore = true;
     try {
-      final newArticles = await apiService.getNews(page: _page, category: category);
+      final newArticles = await apiService.getNews(page: _page, limit: 5, category: category);
       if (newArticles.isEmpty) {
         _hasMore = false;
       } else {

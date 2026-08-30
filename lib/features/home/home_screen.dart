@@ -73,7 +73,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               scrollDirection: Axis.vertical,
               itemCount: articles.length + 1,
               onPageChanged: (index) {
-                if (index >= articles.length - 5) {
+                // Trigger fetch when 2 cards away since we load 5 at a time
+                if (index >= articles.length - 2) {
                   ref.read(newsProvider(null).notifier).fetchNews();
                 }
               },
@@ -82,14 +83,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   return const Center(child: CircularProgressIndicator());
                 }
 
-                // Preload the next article's image for smoother scrolling
-                if (index + 1 < articles.length) {
-                  final nextArticle = articles[index + 1];
-                  if (nextArticle.featuredImageUrl != null) {
-                    precacheImage(
-                      CachedNetworkImageProvider(nextArticle.featuredImageUrl!),
-                      context,
-                    );
+                // Preload the next 3 articles' images for maximum smoothness
+                for (int i = 1; i <= 3; i++) {
+                  if (index + i < articles.length) {
+                    final nextArticle = articles[index + i];
+                    if (nextArticle.featuredImageUrl != null) {
+                      precacheImage(
+                        CachedNetworkImageProvider(nextArticle.featuredImageUrl!),
+                        context,
+                      );
+                    }
                   }
                 }
 
