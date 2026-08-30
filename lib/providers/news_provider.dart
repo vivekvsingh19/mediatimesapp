@@ -9,6 +9,7 @@ class NewsNotifier extends StateNotifier<AsyncValue<List<Article>>> {
   final String? category;
   int _page = 1;
   bool _hasMore = true;
+  bool _isLoadingMore = false;
   List<Article> _articles = [];
 
   NewsNotifier(this.apiService, {this.category}) : super(const AsyncValue.loading()) {
@@ -21,10 +22,13 @@ class NewsNotifier extends StateNotifier<AsyncValue<List<Article>>> {
       _hasMore = true;
       _articles = [];
       state = const AsyncValue.loading();
+    } else {
+      if (_isLoadingMore) return;
     }
 
     if (!_hasMore && !refresh) return;
 
+    _isLoadingMore = true;
     try {
       final newArticles = await apiService.getNews(page: _page, category: category);
       if (newArticles.isEmpty) {
@@ -38,6 +42,8 @@ class NewsNotifier extends StateNotifier<AsyncValue<List<Article>>> {
       if (_articles.isEmpty) {
         state = AsyncValue.error(e, st);
       }
+    } finally {
+      _isLoadingMore = false;
     }
   }
 }

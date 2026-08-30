@@ -14,6 +14,32 @@ class NewsCard extends ConsumerWidget {
 
   const NewsCard({super.key, required this.article});
 
+  String _getCleanExcerpt(String? rawExcerpt) {
+    if (rawExcerpt == null) return '';
+    String text = rawExcerpt;
+
+    // Strip HTML tags
+    text = text.replaceAll(RegExp(r'<[^>]*>'), '');
+    
+    // Replace HTML entities
+    text = text.replaceAll('&nbsp;', ' ');
+
+    // Find the first colon ':' which typically separates the publisher/category from the description
+    // e.g. "द मीडिया टाइम्स डेस्क, 19 जून Bihar News : बिहार के चर्चित..."
+    final colonIndex = text.indexOf(':');
+    if (colonIndex != -1 && colonIndex < 100) {
+      text = text.substring(colonIndex + 1);
+    }
+
+    // Collapse multiple spaces/newlines into a single space, and trim
+    text = text.replaceAll(RegExp(r'\s+'), ' ').trim();
+    
+    // Remove leading punctuation if any (like extra commas or hyphens or dots)
+    text = text.replaceFirst(RegExp(r'^[\s\.,:-]+'), '').trim();
+
+    return text;
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isBookmarkedState = ref.watch(isBookmarkedProvider(article.id));
@@ -103,7 +129,7 @@ class NewsCard extends ConsumerWidget {
                           ),
                           const SizedBox(width: 10),
                           Text(
-                            'Media Times',
+                            'The Media Times',
                             style: TextStyle(
                               fontWeight: FontWeight.w900,
                               fontSize: 14,
@@ -114,9 +140,13 @@ class NewsCard extends ConsumerWidget {
                           const Spacer(),
                           IconButton(
                             icon: Icon(
-                              isBookmarked ? Icons.bookmark : LucideIcons.bookmark,
+                              isBookmarked
+                                  ? Icons.bookmark
+                                  : LucideIcons.bookmark,
                               size: 22,
-                              color: isBookmarked ? Theme.of(context).primaryColor : Colors.black54,
+                              color: isBookmarked
+                                  ? Theme.of(context).primaryColor
+                                  : Colors.black54,
                             ),
                             onPressed: () async {
                               final service = ref.read(bookmarkServiceProvider);
@@ -138,8 +168,12 @@ class NewsCard extends ConsumerWidget {
                               color: Colors.black54,
                             ),
                             onPressed: () {
-                              final url = ApiConstants.getFrontendArticleUrl(article.slug);
-                              Share.share('Check out this article: ${article.title}\n\n$url');
+                              final url = ApiConstants.getFrontendArticleUrl(
+                                article.slug,
+                              );
+                              Share.share(
+                                'Check out this article: ${article.title}\n\n$url',
+                              );
                             },
                             constraints: const BoxConstraints(),
                             padding: EdgeInsets.zero,
@@ -162,11 +196,11 @@ class NewsCard extends ConsumerWidget {
                       ),
                       const SizedBox(height: 12),
 
-                      // Excerpt
-                      if (article.excerpt != null)
+                      // Description / Content
+                      if (article.content != null || article.excerpt != null)
                         Expanded(
                           child: Text(
-                            article.excerpt!,
+                            _getCleanExcerpt(article.content ?? article.excerpt),
                             style: TextStyle(
                               fontSize: 16,
                               color: Colors.grey[800],
@@ -184,7 +218,7 @@ class NewsCard extends ConsumerWidget {
 
                       // Footer
                       Text(
-                        '${article.publishedAt != null ? timeago.format(DateTime.parse(article.publishedAt!)) : 'Unknown'} • ${article.author?.name ?? 'Media Times'}',
+                        '${article.publishedAt != null ? timeago.format(DateTime.parse(article.publishedAt!)) : 'Unknown'} • ${article.author?.name ?? 'The Media Times'}',
                         style: TextStyle(
                           color: Colors.grey[500],
                           fontSize: 12,

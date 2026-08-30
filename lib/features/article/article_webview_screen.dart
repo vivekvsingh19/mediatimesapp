@@ -49,11 +49,49 @@ class _ArticleWebViewScreenState extends State<ArticleWebViewScreen> {
       ),
       body: Stack(
         children: [
-          WebViewWidget(controller: _controller),
+          Offstage(
+            offstage: _isLoading,
+            child: WebViewWidget(controller: _controller),
+          ),
           if (_isLoading)
-            const Center(
-              child: CircularProgressIndicator(),
-            ),
+            const _ArticleSkeletonLoading(),
+        ],
+      ),
+    );
+  }
+}
+
+class _ArticleSkeletonLoading extends StatelessWidget {
+  const _ArticleSkeletonLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final baseColor = isDark ? Colors.grey[850]! : Colors.grey[300]!;
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(24.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Fake Title
+          Container(width: double.infinity, height: 28, decoration: BoxDecoration(color: baseColor, borderRadius: BorderRadius.circular(8))),
+          const SizedBox(height: 12),
+          Container(width: MediaQuery.of(context).size.width * 0.6, height: 28, decoration: BoxDecoration(color: baseColor, borderRadius: BorderRadius.circular(8))),
+          const SizedBox(height: 24),
+          // Fake Image
+          Container(width: double.infinity, height: 220, decoration: BoxDecoration(color: baseColor, borderRadius: BorderRadius.circular(16))),
+          const SizedBox(height: 24),
+          // Fake Content
+          Container(width: double.infinity, height: 16, decoration: BoxDecoration(color: baseColor, borderRadius: BorderRadius.circular(4))),
+          const SizedBox(height: 12),
+          Container(width: double.infinity, height: 16, decoration: BoxDecoration(color: baseColor, borderRadius: BorderRadius.circular(4))),
+          const SizedBox(height: 12),
+          Container(width: MediaQuery.of(context).size.width * 0.8, height: 16, decoration: BoxDecoration(color: baseColor, borderRadius: BorderRadius.circular(4))),
+          const SizedBox(height: 24),
+          Container(width: double.infinity, height: 16, decoration: BoxDecoration(color: baseColor, borderRadius: BorderRadius.circular(4))),
+          const SizedBox(height: 12),
+          Container(width: MediaQuery.of(context).size.width * 0.9, height: 16, decoration: BoxDecoration(color: baseColor, borderRadius: BorderRadius.circular(4))),
         ],
       ),
     );

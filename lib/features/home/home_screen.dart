@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../providers/news_provider.dart';
 import 'widgets/news_card.dart';
-
 
 import 'package:lucide_icons/lucide_icons.dart';
 
@@ -39,12 +39,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 color: Theme.of(context).primaryColor,
                 borderRadius: BorderRadius.circular(6),
               ),
-              child: const Icon(LucideIcons.newspaper, color: Colors.white, size: 16),
+              child: const Icon(
+                LucideIcons.newspaper,
+                color: Colors.white,
+                size: 16,
+              ),
             ),
             const SizedBox(width: 8),
             const Text(
-              'MEDIA TIMES', 
-              style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 0.5, fontSize: 18)
+              'THE MEDIA TIMES',
+              style: TextStyle(
+                fontWeight: FontWeight.w900,
+                letterSpacing: 0.5,
+                fontSize: 18,
+              ),
             ),
           ],
         ),
@@ -58,13 +66,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             return const Center(child: Text('No news available.'));
           }
           return RefreshIndicator(
-            onRefresh: () => ref.read(newsProvider(null).notifier).fetchNews(refresh: true),
+            onRefresh: () =>
+                ref.read(newsProvider(null).notifier).fetchNews(refresh: true),
             child: PageView.builder(
               controller: _pageController,
               scrollDirection: Axis.vertical,
               itemCount: articles.length + 1,
               onPageChanged: (index) {
-                if (index == articles.length - 1) {
+                if (index >= articles.length - 5) {
                   ref.read(newsProvider(null).notifier).fetchNews();
                 }
               },
@@ -72,7 +81,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 if (index >= articles.length) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                
+
+                // Preload the next article's image for smoother scrolling
+                if (index + 1 < articles.length) {
+                  final nextArticle = articles[index + 1];
+                  if (nextArticle.featuredImageUrl != null) {
+                    precacheImage(
+                      CachedNetworkImageProvider(nextArticle.featuredImageUrl!),
+                      context,
+                    );
+                  }
+                }
+
                 final article = articles[index];
                 return NewsCard(article: article);
               },
@@ -87,7 +107,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               Text('Unable to load news: $err', textAlign: TextAlign.center),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: () => ref.read(newsProvider(null).notifier).fetchNews(refresh: true),
+                onPressed: () => ref
+                    .read(newsProvider(null).notifier)
+                    .fetchNews(refresh: true),
                 child: const Text('Try Again'),
               ),
             ],
