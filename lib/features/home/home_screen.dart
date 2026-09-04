@@ -60,6 +60,46 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         elevation: 0,
         scrolledUnderElevation: 0,
       ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+              ),
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Icon(
+                    LucideIcons.newspaper,
+                    color: Colors.white,
+                    size: 48,
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'The Media Times',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              leading: const Icon(LucideIcons.mail),
+              title: const Text('Contact Us'),
+              onTap: () {
+                Navigator.pop(context); // Close the drawer
+                context.push('/contact-us');
+              },
+            ),
+          ],
+        ),
+      ),
       body: newsState.when(
         data: (articles) {
           if (articles.isEmpty) {
