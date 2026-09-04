@@ -30,21 +30,15 @@ class ContactUsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 32),
             _buildContactItem(
+              icon: LucideIcons.globe,
+              title: 'Website',
+              subtitle: 'https://themediatimes.live',
+            ),
+            const SizedBox(height: 16),
+            _buildContactItem(
               icon: LucideIcons.mail,
               title: 'Email',
-              subtitle: 'contact@themediatimes.com',
-            ),
-            const SizedBox(height: 16),
-            _buildContactItem(
-              icon: LucideIcons.phone,
-              title: 'Phone',
-              subtitle: '+1 (555) 123-4567',
-            ),
-            const SizedBox(height: 16),
-            _buildContactItem(
-              icon: LucideIcons.mapPin,
-              title: 'Address',
-              subtitle: '123 Media Times Blvd, Suite 100\nNews City, NY 10001\nUnited States',
+              subtitle: 'contact@themediatimes.live',
             ),
             const SizedBox(height: 32),
             const Text(
@@ -122,8 +116,10 @@ class ContactUsScreen extends StatelessWidget {
     return InkWell(
       onTap: () async {
         final uri = Uri.parse(url);
-        if (await canLaunchUrl(uri)) {
+        try {
           await launchUrl(uri, mode: LaunchMode.externalApplication);
+        } catch (e) {
+          debugPrint('Could not launch $url');
         }
       },
       borderRadius: BorderRadius.circular(24),
