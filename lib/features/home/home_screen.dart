@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../providers/news_provider.dart';
 import '../../providers/categories_provider.dart';
 import 'widgets/news_card.dart';
-
-import 'package:google_fonts/google_fonts.dart';
-import 'package:lucide_icons/lucide_icons.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -33,61 +29,71 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.black.withOpacity(0.9),
+        backgroundColor: Colors.black.withValues(alpha: 0.9),
         elevation: 0,
         scrolledUnderElevation: 0,
-        title: ref.watch(categoriesProvider).when(
-          data: (categories) => SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _selectedCategorySlug = null;
-                      });
-                      if (_pageController.hasClients) _pageController.jumpToPage(0);
-                    },
-                    child: Text(
-                      'All',
-                      style: TextStyle(
-                        color: _selectedCategorySlug == null ? Colors.red : Colors.white70,
-                        fontSize: 16,
-                        fontWeight: _selectedCategorySlug == null ? FontWeight.bold : FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-                ...categories.map((c) {
-                  final isSelected = _selectedCategorySlug == c.slug;
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _selectedCategorySlug = c.slug;
-                        });
-                        if (_pageController.hasClients) _pageController.jumpToPage(0);
-                      },
-                      child: Text(
-                        c.name,
-                        style: TextStyle(
-                          color: isSelected ? Colors.red : Colors.white70,
-                          fontSize: 16,
-                          fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+        title: ref
+            .watch(categoriesProvider)
+            .when(
+              data: (categories) => SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedCategorySlug = null;
+                          });
+                          if (_pageController.hasClients)
+                            _pageController.jumpToPage(0);
+                        },
+                        child: Text(
+                          'All',
+                          style: TextStyle(
+                            color: _selectedCategorySlug == null
+                                ? Colors.red
+                                : Colors.white70,
+                            fontSize: 16,
+                            fontWeight: _selectedCategorySlug == null
+                                ? FontWeight.bold
+                                : FontWeight.w500,
+                          ),
                         ),
                       ),
                     ),
-                  );
-                }).toList(),
-              ],
+                    ...categories.map((c) {
+                      final isSelected = _selectedCategorySlug == c.slug;
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _selectedCategorySlug = c.slug;
+                            });
+                            if (_pageController.hasClients)
+                              _pageController.jumpToPage(0);
+                          },
+                          child: Text(
+                            c.name,
+                            style: TextStyle(
+                              color: isSelected ? Colors.red : Colors.white70,
+                              fontSize: 16,
+                              fontWeight: isSelected
+                                  ? FontWeight.bold
+                                  : FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ],
+                ),
+              ),
+              loading: () => const SizedBox.shrink(),
+              error: (_, __) => const SizedBox.shrink(),
             ),
-          ),
-          loading: () => const SizedBox.shrink(),
-          error: (_, __) => const SizedBox.shrink(),
-        ),
         centerTitle: false,
       ),
       body: newsState.when(
@@ -96,8 +102,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             return const Center(child: Text('No news available.'));
           }
           return RefreshIndicator(
-            onRefresh: () =>
-                ref.read(newsProvider(_selectedCategorySlug).notifier).fetchNews(refresh: true),
+            onRefresh: () => ref
+                .read(newsProvider(_selectedCategorySlug).notifier)
+                .fetchNews(refresh: true),
             child: PageView.builder(
               controller: _pageController,
               scrollDirection: Axis.vertical,
@@ -105,7 +112,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               onPageChanged: (index) {
                 // Trigger fetch when 2 cards away since we load 5 at a time
                 if (index >= articles.length - 2) {
-                  ref.read(newsProvider(_selectedCategorySlug).notifier).fetchNews();
+                  ref
+                      .read(newsProvider(_selectedCategorySlug).notifier)
+                      .fetchNews();
                 }
               },
               itemBuilder: (context, index) {
@@ -119,7 +128,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     final nextArticle = articles[index + i];
                     if (nextArticle.featuredImageUrl != null) {
                       precacheImage(
-                        CachedNetworkImageProvider(nextArticle.featuredImageUrl!),
+                        CachedNetworkImageProvider(
+                          nextArticle.featuredImageUrl!,
+                        ),
                         context,
                       );
                     }

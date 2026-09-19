@@ -9,7 +9,7 @@ import '../features/bookmarks/bookmarks_screen.dart';
 import '../features/article/article_webview_screen.dart';
 
 import '../features/search/search_screen.dart';
-import '../features/settings/contact_us_screen.dart';
+import '../features/settings/settings_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -29,8 +29,8 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const BookmarksScreen(),
           ),
           GoRoute(
-            path: '/contact-us',
-            builder: (context, state) => const ContactUsScreen(),
+            path: '/settings',
+            builder: (context, state) => const SettingsScreen(),
           ),
         ],
       ),

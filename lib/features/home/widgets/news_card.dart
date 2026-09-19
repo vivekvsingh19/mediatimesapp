@@ -7,7 +7,6 @@ import '../../../models/article.dart';
 import '../../../core/constants/api_constants.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
 import '../../../providers/bookmark_provider.dart';
 import 'dart:io';
 import 'package:dio/dio.dart';
@@ -58,7 +57,7 @@ class NewsCard extends ConsumerWidget {
       child: Container(
         margin: EdgeInsets.zero,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).cardColor,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(16),
             topRight: Radius.circular(16),
@@ -117,7 +116,7 @@ class NewsCard extends ConsumerWidget {
               Expanded(
                 flex: 55,
                 child: Container(
-                  color: Colors.white,
+                  color: Theme.of(context).cardColor,
                   padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,7 +138,7 @@ class NewsCard extends ConsumerWidget {
                             style: TextStyle(
                               fontWeight: FontWeight.w900,
                               fontSize: 14,
-                              color: Colors.grey[800],
+                              color: Theme.of(context).textTheme.bodyLarge?.color?.withOpacity(0.8),
                               letterSpacing: 1.2,
                             ),
                           ),
@@ -152,7 +151,7 @@ class NewsCard extends ConsumerWidget {
                               size: 22,
                               color: isBookmarked
                                   ? Theme.of(context).primaryColor
-                                  : Colors.black54,
+                                  : Theme.of(context).iconTheme.color?.withOpacity(0.54) ?? Colors.black54,
                             ),
                             onPressed: () async {
                               final service = ref.read(bookmarkServiceProvider);
@@ -168,10 +167,10 @@ class NewsCard extends ConsumerWidget {
                             padding: const EdgeInsets.symmetric(horizontal: 8),
                           ),
                           IconButton(
-                            icon: const Icon(
+                            icon: Icon(
                               LucideIcons.share2,
                               size: 22,
-                              color: Colors.black54,
+                              color: Theme.of(context).iconTheme.color?.withValues(alpha: 0.54) ?? Colors.black54,
                             ),
                             onPressed: () async {
                               final url = ApiConstants.getFrontendArticleUrl(article.slug);
@@ -205,11 +204,11 @@ class NewsCard extends ConsumerWidget {
                       // Title
                       Text(
                         article.title,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w800,
                           height: 1.25,
-                          color: Colors.black87,
+                          color: Theme.of(context).textTheme.titleLarge?.color,
                         ),
                         maxLines: 4,
                         overflow: TextOverflow.ellipsis,
@@ -223,7 +222,7 @@ class NewsCard extends ConsumerWidget {
                             _getCleanExcerpt(article.content ?? article.excerpt),
                             style: TextStyle(
                               fontSize: 16,
-                              color: Colors.grey[800],
+                              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8),
                               height: 1.5,
                               fontWeight: FontWeight.w400,
                             ),
@@ -240,7 +239,7 @@ class NewsCard extends ConsumerWidget {
                       Text(
                         '${article.publishedAt != null ? timeago.format(DateTime.parse(article.publishedAt!)) : 'Unknown'} • ${article.author?.name ?? 'The Media Times.Live'}',
                         style: TextStyle(
-                          color: Colors.grey[500],
+                          color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6),
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                         ),
