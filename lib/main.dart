@@ -3,13 +3,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'navigation/main_navigation.dart';
 import 'core/theme/app_theme.dart';
 import 'core/constants/api_constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'providers/language_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ApiConstants.init();
+  final prefs = await SharedPreferences.getInstance();
+
   runApp(
-    const ProviderScope(
-      child: MediaTimesApp(),
+    ProviderScope(
+      overrides: [
+        sharedPreferencesProvider.overrideWithValue(prefs),
+      ],
+      child: const MediaTimesApp(),
     ),
   );
 }

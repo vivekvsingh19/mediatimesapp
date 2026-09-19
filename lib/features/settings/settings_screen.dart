@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SettingsScreen extends StatelessWidget {
+import '../../providers/language_provider.dart';
+
+class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentLang = ref.watch(languageProvider);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -20,6 +23,40 @@ class SettingsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Text(
+              'Language / भाषा',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
+              ),
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton<String>(
+                  value: currentLang,
+                  isExpanded: true,
+                  icon: const Icon(LucideIcons.chevronDown),
+                  items: const [
+                    DropdownMenuItem(value: 'en', child: Text('English', style: TextStyle(fontSize: 16))),
+                    DropdownMenuItem(value: 'hi', child: Text('Hindi (हिंदी)', style: TextStyle(fontSize: 16))),
+                    DropdownMenuItem(value: 'mr', child: Text('Marathi (मराठी)', style: TextStyle(fontSize: 16))),
+                  ],
+                  onChanged: (String? newLang) {
+                    if (newLang != null) {
+                      ref.read(languageProvider.notifier).setLanguage(newLang);
+                    }
+                  },
+                ),
+              ),
+            ),
+            const SizedBox(height: 32),
             const Text(
               'Get in Touch',
               style: TextStyle(
