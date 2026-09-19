@@ -15,9 +15,11 @@ class BookmarksScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SAVED', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.2)),
+        backgroundColor: Colors.black,
+        title: const Text('SAVED', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.2, color: Colors.white)),
         centerTitle: true,
         elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: bookmarksState.when(
         data: (bookmarks) {

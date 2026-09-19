@@ -22,15 +22,21 @@ final routerProvider = Provider<GoRouter>((ref) {
         routes: [
           GoRoute(
             path: '/',
-            builder: (context, state) => const HomeScreen(),
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: HomeScreen(),
+            ),
           ),
           GoRoute(
             path: '/bookmarks',
-            builder: (context, state) => const BookmarksScreen(),
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: BookmarksScreen(),
+            ),
           ),
           GoRoute(
             path: '/settings',
-            builder: (context, state) => const SettingsScreen(),
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: SettingsScreen(),
+            ),
           ),
         ],
       ),

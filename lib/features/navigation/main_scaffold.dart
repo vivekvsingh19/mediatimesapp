@@ -11,6 +11,7 @@ class MainScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: child,
       extendBody: true,
       bottomNavigationBar: Container(
