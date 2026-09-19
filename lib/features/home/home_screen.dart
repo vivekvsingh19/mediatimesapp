@@ -18,6 +18,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final PageController _pageController = PageController();
+  String? _selectedCategorySlug;
 
   @override
   void dispose() {
@@ -27,7 +28,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final newsState = ref.watch(newsProvider(null));
+    final newsState = ref.watch(newsProvider(_selectedCategorySlug));
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -39,16 +40,49 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           data: (categories) => SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: categories.map((c) => Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                child: GestureDetector(
-                  onTap: () => context.push('/category/${c.slug}', extra: c.name),
-                  child: Text(
-                    c.name,
-                    style: const TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.w500),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedCategorySlug = null;
+                      });
+                      if (_pageController.hasClients) _pageController.jumpToPage(0);
+                    },
+                    child: Text(
+                      'All',
+                      style: TextStyle(
+                        color: _selectedCategorySlug == null ? Colors.red : Colors.white70,
+                        fontSize: 16,
+                        fontWeight: _selectedCategorySlug == null ? FontWeight.bold : FontWeight.w500,
+                      ),
+                    ),
                   ),
                 ),
-              )).toList(),
+                ...categories.map((c) {
+                  final isSelected = _selectedCategorySlug == c.slug;
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _selectedCategorySlug = c.slug;
+                        });
+                        if (_pageController.hasClients) _pageController.jumpToPage(0);
+                      },
+                      child: Text(
+                        c.name,
+                        style: TextStyle(
+                          color: isSelected ? Colors.red : Colors.white70,
+                          fontSize: 16,
+                          fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ],
             ),
           ),
           loading: () => const SizedBox.shrink(),
@@ -63,7 +97,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           }
           return RefreshIndicator(
             onRefresh: () =>
-                ref.read(newsProvider(null).notifier).fetchNews(refresh: true),
+                ref.read(newsProvider(_selectedCategorySlug).notifier).fetchNews(refresh: true),
             child: PageView.builder(
               controller: _pageController,
               scrollDirection: Axis.vertical,
@@ -71,7 +105,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               onPageChanged: (index) {
                 // Trigger fetch when 2 cards away since we load 5 at a time
                 if (index >= articles.length - 2) {
-                  ref.read(newsProvider(null).notifier).fetchNews();
+                  ref.read(newsProvider(_selectedCategorySlug).notifier).fetchNews();
                 }
               },
               itemBuilder: (context, index) {
@@ -107,7 +141,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () => ref
-                    .read(newsProvider(null).notifier)
+                    .read(newsProvider(_selectedCategorySlug).notifier)
                     .fetchNews(refresh: true),
                 child: const Text('Try Again'),
               ),

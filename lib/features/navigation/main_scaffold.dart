@@ -36,7 +36,7 @@ class MainScaffold extends StatelessWidget {
           items: const [
             BottomNavigationBarItem(icon: Icon(LucideIcons.home), label: 'Home'),
             BottomNavigationBarItem(icon: Icon(LucideIcons.bookmark), label: 'Bookmarks'),
-            BottomNavigationBarItem(icon: Icon(LucideIcons.user), label: 'Profile'),
+            BottomNavigationBarItem(icon: Icon(LucideIcons.mail), label: 'Contact Us'),
           ],
         ),
       ),
@@ -48,7 +48,7 @@ class MainScaffold extends StatelessWidget {
     if (location.startsWith('/bookmarks')) {
       return 1;
     }
-    if (location.startsWith('/profile')) {
+    if (location.startsWith('/contact-us')) {
       return 2;
     }
     return 0;
@@ -63,7 +63,7 @@ class MainScaffold extends StatelessWidget {
         context.go('/bookmarks');
         break;
       case 2:
-        context.go('/profile');
+        context.go('/contact-us');
         break;
     }
   }
