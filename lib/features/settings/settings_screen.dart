@@ -1,45 +1,86 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ContactUsScreen extends StatelessWidget {
-  const ContactUsScreen({super.key});
+import '../../providers/theme_provider.dart';
+
+class SettingsScreen extends ConsumerWidget {
+  const SettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final themeMode = ref.watch(themeProvider);
+    final isDarkMode = themeMode == ThemeMode.dark;
+
     return Scaffold(
-      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Contact Us', style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.black.withOpacity(0.9),
-        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text('Settings'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Theme Toggle
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.surface,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Dark Mode',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Switch(
+                    value: isDarkMode,
+                    onChanged: (_) {
+                      ref.read(themeProvider.notifier).toggleTheme();
+                    },
+                    activeColor: Theme.of(context).primaryColor,
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 32),
+            
+            // Contact Us Section
             const Text(
               'Get in Touch',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
               ),
             ),
             const SizedBox(height: 16),
-            const Text(
+            Text(
               'If you have any questions, feedback, or concerns about our news content, please feel free to reach out to us using the contact information below.',
-              style: TextStyle(fontSize: 16, color: Colors.white70),
+              style: TextStyle(fontSize: 16, color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8)),
             ),
             const SizedBox(height: 32),
             _buildContactItem(
+              context,
               icon: LucideIcons.globe,
               title: 'Website',
               subtitle: 'https://themediatimes.live',
             ),
             const SizedBox(height: 16),
             _buildContactItem(
+              context,
               icon: LucideIcons.mail,
               title: 'Email',
               subtitle: 'contact@themediatimes.live',
@@ -50,7 +91,6 @@ class ContactUsScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
               ),
             ),
             const SizedBox(height: 16),
@@ -58,21 +98,25 @@ class ContactUsScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 _buildSocialIcon(
+                  context,
                   icon: LucideIcons.instagram,
                   url: 'https://www.instagram.com/themediatimes.live?igsi=MW0xYWR5eDZzYzI0Mw==',
                 ),
                 const SizedBox(width: 16),
                 _buildSocialIcon(
+                  context,
                   icon: LucideIcons.twitter,
                   url: 'https://x.com/themediatimes_',
                 ),
                 const SizedBox(width: 16),
                 _buildSocialIcon(
+                  context,
                   icon: LucideIcons.youtube,
                   url: 'https://youtube.com/@themediatimes?si=h4-UkvSA1XE_1gUT',
                 ),
                 const SizedBox(width: 16),
                 _buildSocialIcon(
+                  context,
                   icon: LucideIcons.linkedin,
                   url: 'https://www.linkedin.com/company/themediatimes/',
                 ),
@@ -84,7 +128,8 @@ class ContactUsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildContactItem({
+  Widget _buildContactItem(
+    BuildContext context, {
     required IconData icon,
     required String title,
     required String subtitle,
@@ -92,7 +137,7 @@ class ContactUsScreen extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 24, color: Colors.white),
+        Icon(icon, size: 24, color: Theme.of(context).primaryColor),
         const SizedBox(width: 16),
         Expanded(
           child: Column(
@@ -103,13 +148,12 @@ class ContactUsScreen extends StatelessWidget {
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
                 ),
               ),
               const SizedBox(height: 4),
               Text(
                 subtitle,
-                style: const TextStyle(fontSize: 16, color: Colors.white70),
+                style: TextStyle(fontSize: 16, color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8)),
               ),
             ],
           ),
@@ -118,7 +162,7 @@ class ContactUsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSocialIcon({required IconData icon, required String url}) {
+  Widget _buildSocialIcon(BuildContext context, {required IconData icon, required String url}) {
     return InkWell(
       onTap: () async {
         final uri = Uri.parse(url);
@@ -132,10 +176,10 @@ class ContactUsScreen extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.1),
+          color: Theme.of(context).primaryColor.withOpacity(0.1),
           shape: BoxShape.circle,
         ),
-        child: Icon(icon, color: Colors.white, size: 28),
+        child: Icon(icon, color: Theme.of(context).primaryColor, size: 28),
       ),
     );
   }
