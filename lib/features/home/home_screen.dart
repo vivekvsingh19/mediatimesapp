@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../../providers/news_provider.dart';
 import '../../providers/categories_provider.dart';
 import 'widgets/news_card.dart';
+import 'widgets/news_card_skeleton.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -119,7 +120,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               },
               itemBuilder: (context, index) {
                 if (index >= articles.length) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const NewsCardSkeleton();
                 }
 
                 // Preload the next 3 articles' images for maximum smoothness
@@ -143,7 +144,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const NewsCardSkeleton(),
         error: (err, stack) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
