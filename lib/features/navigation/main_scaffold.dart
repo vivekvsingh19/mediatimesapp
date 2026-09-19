@@ -12,44 +12,58 @@ class MainScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: child,
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _calculateSelectedIndex(context),
-        onTap: (int idx) => _onItemTapped(idx, context),
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(LucideIcons.layoutGrid), label: 'Explore'),
-          BottomNavigationBarItem(icon: Icon(LucideIcons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(LucideIcons.bookmark), label: 'Saved'),
-        ],
+      extendBody: true,
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.95),
+          border: Border(
+            top: BorderSide(
+              color: Colors.white.withOpacity(0.1),
+              width: 0.5,
+            ),
+          ),
+        ),
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          currentIndex: _calculateSelectedIndex(context),
+          onTap: (int idx) => _onItemTapped(idx, context),
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.grey,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          items: const [
+            BottomNavigationBarItem(icon: Icon(LucideIcons.home), label: 'Home'),
+            BottomNavigationBarItem(icon: Icon(LucideIcons.bookmark), label: 'Bookmarks'),
+            BottomNavigationBarItem(icon: Icon(LucideIcons.user), label: 'Profile'),
+          ],
+        ),
       ),
     );
   }
 
   static int _calculateSelectedIndex(BuildContext context) {
     final String location = GoRouterState.of(context).uri.path;
-    if (location.startsWith('/categories')) {
-      return 0;
-    }
     if (location.startsWith('/bookmarks')) {
+      return 1;
+    }
+    if (location.startsWith('/profile')) {
       return 2;
     }
-    return 1;
+    return 0;
   }
 
   void _onItemTapped(int index, BuildContext context) {
     switch (index) {
       case 0:
-        context.go('/categories');
-        break;
-      case 1:
         context.go('/');
         break;
-      case 2:
+      case 1:
         context.go('/bookmarks');
+        break;
+      case 2:
+        context.go('/profile');
         break;
     }
   }

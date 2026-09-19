@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../providers/news_provider.dart';
+import '../../providers/categories_provider.dart';
 import 'widgets/news_card.dart';
 
 import 'package:google_fonts/google_fonts.dart';
@@ -29,65 +30,31 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final newsState = ref.watch(newsProvider(null));
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
-            'The Media Times.Live',
-            style: TextStyle(
-              fontWeight: FontWeight.w900,
-              letterSpacing: 1.2,
-            ),
-          ),
-        ),
-        centerTitle: true,
+        backgroundColor: Colors.black.withOpacity(0.9),
         elevation: 0,
         scrolledUnderElevation: 0,
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(
-                      'assets/icon.png',
-                      width: 48,
-                      height: 48,
-                    ),
+        title: ref.watch(categoriesProvider).when(
+          data: (categories) => SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: categories.map((c) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: GestureDetector(
+                  onTap: () => context.push('/category/${c.slug}', extra: c.name),
+                  child: Text(
+                    c.name,
+                    style: const TextStyle(color: Colors.white70, fontSize: 16, fontWeight: FontWeight.w500),
                   ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'The Media Times.Live',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 1.2,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              )).toList(),
             ),
-            ListTile(
-              leading: const Icon(LucideIcons.mail),
-              title: const Text('Contact Us'),
-              onTap: () {
-                Navigator.pop(context); // Close the drawer
-                context.push('/contact-us');
-              },
-            ),
-          ],
+          ),
+          loading: () => const SizedBox.shrink(),
+          error: (_, __) => const SizedBox.shrink(),
         ),
+        centerTitle: false,
       ),
       body: newsState.when(
         data: (articles) {

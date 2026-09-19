@@ -10,6 +10,7 @@ import '../features/article/article_webview_screen.dart';
 
 import '../features/search/search_screen.dart';
 import '../features/settings/contact_us_screen.dart';
+import '../features/profile/profile_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -25,16 +26,20 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const HomeScreen(),
           ),
           GoRoute(
-            path: '/categories',
-            builder: (context, state) => const CategoriesScreen(),
-          ),
-          GoRoute(
             path: '/bookmarks',
             builder: (context, state) => const BookmarksScreen(),
+          ),
+          GoRoute(
+            path: '/profile',
+            builder: (context, state) => const ProfileScreen(),
           ),
         ],
       ),
 
+      GoRoute(
+        path: '/categories',
+        builder: (context, state) => const CategoriesScreen(),
+      ),
       GoRoute(
         path: '/article/webview',
         builder: (context, state) {

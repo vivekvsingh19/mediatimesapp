@@ -56,10 +56,13 @@ class NewsCard extends ConsumerWidget {
         );
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+        margin: EdgeInsets.zero,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
+          ),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.08),
@@ -69,7 +72,10 @@ class NewsCard extends ConsumerWidget {
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(16),
+            topRight: Radius.circular(16),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -89,20 +95,20 @@ class NewsCard extends ConsumerWidget {
                         ),
                         errorWidget: (context, url, error) => Container(
                           color: Colors.grey[200],
-                          child: const Icon(
-                            LucideIcons.imageOff,
-                            size: 50,
-                            color: Colors.grey,
+                          padding: const EdgeInsets.all(32.0),
+                          child: Image.asset(
+                            'assets/icon.png',
+                            fit: BoxFit.contain,
                           ),
                         ),
                       )
                     : Container(
                         color: Colors.grey[200],
                         width: double.infinity,
-                        child: const Icon(
-                          LucideIcons.newspaper,
-                          size: 80,
-                          color: Colors.grey,
+                        padding: const EdgeInsets.all(32.0),
+                        child: Image.asset(
+                          'assets/icon.png',
+                          fit: BoxFit.contain,
                         ),
                       ),
               ),
