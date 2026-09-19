@@ -31,26 +31,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(6),
-              child: Image.asset(
-                'assets/icon.png',
-                width: 28,
-                height: 28,
-              ),
+        title: const FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            'The Media Times.Live',
+            style: TextStyle(
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1.2,
             ),
-            const SizedBox(width: 8),
-            Text(
-              'The Media Times.Live',
-              style: const TextStyle(
-                fontWeight: FontWeight.w900,
-                letterSpacing: 1.2,
-              ),
-            ),
-          ],
+          ),
         ),
         centerTitle: true,
         elevation: 0,

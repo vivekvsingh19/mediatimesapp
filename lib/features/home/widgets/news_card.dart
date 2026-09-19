@@ -9,6 +9,9 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../providers/bookmark_provider.dart';
+import 'dart:io';
+import 'package:dio/dio.dart';
+import 'package:path_provider/path_provider.dart';
 
 class NewsCard extends ConsumerWidget {
   final Article article;
@@ -56,7 +59,7 @@ class NewsCard extends ConsumerWidget {
         margin: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(32),
+          borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.08),
@@ -66,7 +69,7 @@ class NewsCard extends ConsumerWidget {
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(32),
+          borderRadius: BorderRadius.circular(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -164,13 +167,27 @@ class NewsCard extends ConsumerWidget {
                               size: 22,
                               color: Colors.black54,
                             ),
-                            onPressed: () {
-                              final url = ApiConstants.getFrontendArticleUrl(
-                                article.slug,
-                              );
-                              Share.share(
-                                'Check out this article: ${article.title}\n\n$url',
-                              );
+                            onPressed: () async {
+                              final url = ApiConstants.getFrontendArticleUrl(article.slug);
+                              final shareText = 'Check out this article: ${article.title}\n\n$url';
+                              
+                              if (article.featuredImageUrl != null) {
+                                try {
+                                  final response = await Dio().get(
+                                    article.featuredImageUrl!,
+                                    options: Options(responseType: ResponseType.bytes),
+                                  );
+                                  final tempDir = await getTemporaryDirectory();
+                                  final file = File('${tempDir.path}/share_${article.id}.jpg');
+                                  await file.writeAsBytes(response.data);
+                                  await Share.shareXFiles([XFile(file.path)], text: shareText);
+                                } catch (e) {
+                                  // Fallback to text only
+                                  await Share.share(shareText);
+                                }
+                              } else {
+                                await Share.share(shareText);
+                              }
                             },
                             constraints: const BoxConstraints(),
                             padding: EdgeInsets.zero,
