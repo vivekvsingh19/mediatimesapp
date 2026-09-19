@@ -13,7 +13,7 @@ import '../features/settings/contact_us_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
-    initialLocation: '/',
+    initialLocation: '/categories',
     routes: [
       ShellRoute(
         builder: (context, state, child) {

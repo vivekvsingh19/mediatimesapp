@@ -21,8 +21,8 @@ class MainScaffold extends StatelessWidget {
         showSelectedLabels: false,
         showUnselectedLabels: false,
         items: const [
-          BottomNavigationBarItem(icon: Icon(LucideIcons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(LucideIcons.layoutGrid), label: 'Explore'),
+          BottomNavigationBarItem(icon: Icon(LucideIcons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(LucideIcons.bookmark), label: 'Saved'),
         ],
       ),
@@ -32,21 +32,21 @@ class MainScaffold extends StatelessWidget {
   static int _calculateSelectedIndex(BuildContext context) {
     final String location = GoRouterState.of(context).uri.path;
     if (location.startsWith('/categories')) {
-      return 1;
+      return 0;
     }
     if (location.startsWith('/bookmarks')) {
       return 2;
     }
-    return 0;
+    return 1;
   }
 
   void _onItemTapped(int index, BuildContext context) {
     switch (index) {
       case 0:
-        context.go('/');
+        context.go('/categories');
         break;
       case 1:
-        context.go('/categories');
+        context.go('/');
         break;
       case 2:
         context.go('/bookmarks');

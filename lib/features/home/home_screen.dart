@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../../providers/news_provider.dart';
 import 'widgets/news_card.dart';
 
+import 'package:google_fonts/google_fonts.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -33,25 +34,20 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
-                borderRadius: BorderRadius.circular(6),
-              ),
-              child: const Icon(
-                LucideIcons.newspaper,
-                color: Colors.white,
-                size: 16,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: Image.asset(
+                'assets/icon.png',
+                width: 28,
+                height: 28,
               ),
             ),
             const SizedBox(width: 8),
-            const Text(
-              'THE MEDIA TIMES',
-              style: TextStyle(
+            Text(
+              'The Media Times.Live',
+              style: const TextStyle(
                 fontWeight: FontWeight.w900,
-                letterSpacing: 0.5,
-                fontSize: 18,
+                letterSpacing: 1.2,
               ),
             ),
           ],
@@ -68,22 +64,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
               ),
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Icon(
-                    LucideIcons.newspaper,
-                    color: Colors.white,
-                    size: 48,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: Image.asset(
+                      'assets/icon.png',
+                      width: 48,
+                      height: 48,
+                    ),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Text(
-                    'The Media Times',
-                    style: TextStyle(
+                    'The Media Times.Live',
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.2,
                     ),
                   ),
                 ],

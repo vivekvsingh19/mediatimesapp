@@ -7,6 +7,7 @@ import '../../../models/article.dart';
 import '../../../core/constants/api_constants.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../../providers/bookmark_provider.dart';
 
 class NewsCard extends ConsumerWidget {
@@ -115,26 +116,22 @@ class NewsCard extends ConsumerWidget {
                       // Publisher Bar
                       Row(
                         children: [
-                          Container(
-                            padding: const EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              LucideIcons.newspaper,
-                              color: Colors.white,
-                              size: 14,
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(6),
+                            child: Image.asset(
+                              'assets/icon.png',
+                              width: 24,
+                              height: 24,
                             ),
                           ),
                           const SizedBox(width: 10),
                           Text(
-                            'The Media Times',
+                            'The Media Times.Live',
                             style: TextStyle(
                               fontWeight: FontWeight.w900,
                               fontSize: 14,
                               color: Colors.grey[800],
-                              letterSpacing: -0.5,
+                              letterSpacing: 1.2,
                             ),
                           ),
                           const Spacer(),
@@ -218,7 +215,7 @@ class NewsCard extends ConsumerWidget {
 
                       // Footer
                       Text(
-                        '${article.publishedAt != null ? timeago.format(DateTime.parse(article.publishedAt!)) : 'Unknown'} • ${article.author?.name ?? 'The Media Times'}',
+                        '${article.publishedAt != null ? timeago.format(DateTime.parse(article.publishedAt!)) : 'Unknown'} • ${article.author?.name ?? 'The Media Times.Live'}',
                         style: TextStyle(
                           color: Colors.grey[500],
                           fontSize: 12,
