@@ -53,8 +53,10 @@ class AdSlot extends ConsumerWidget {
               onTap: () async {
                 if (ad.destinationUrl != null) {
                   final uri = Uri.parse(ad.destinationUrl!);
-                  if (await canLaunchUrl(uri)) {
-                    await launchUrl(uri);
+                  try {
+                    await launchUrl(uri, mode: LaunchMode.externalApplication);
+                  } catch (e) {
+                    debugPrint('Could not launch $uri');
                   }
                 }
               },
