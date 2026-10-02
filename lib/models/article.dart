@@ -1,15 +1,40 @@
+class ArticleCategoryTranslation {
+  final String language;
+  final String name;
+
+  ArticleCategoryTranslation({required this.language, required this.name});
+
+  factory ArticleCategoryTranslation.fromJson(Map<String, dynamic> json) {
+    return ArticleCategoryTranslation(
+      language: json['language'] as String,
+      name: json['name'] as String,
+    );
+  }
+}
+
 class ArticleCategory {
   final int id;
   final String name;
   final String slug;
 
-  ArticleCategory({required this.id, required this.name, required this.slug});
+  final List<ArticleCategoryTranslation>? translations;
+
+  ArticleCategory({required this.id, required this.name, required this.slug, this.translations});
+
+  String getLocalizedName(String langCode) {
+    if (langCode == 'en' || translations == null || translations!.isEmpty) return name;
+    final translation = translations!.where((t) => t.language == langCode).firstOrNull;
+    return translation?.name ?? name;
+  }
 
   factory ArticleCategory.fromJson(Map<String, dynamic> json) {
     return ArticleCategory(
       id: json['id'] as int,
       name: json['name'] as String,
       slug: json['slug'] as String,
+      translations: (json['translations'] as List<dynamic>?)
+          ?.map((e) => ArticleCategoryTranslation.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
   }
 }

@@ -75,9 +75,9 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      subtitle: article.category != null ? Text(article.category!.name) : null,
+                      subtitle: article.category != null ? Text(article.category!.getLocalizedName(currentLang)) : null,
                       onTap: () {
-                        context.push('/article/webview', extra: ApiConstants.getFrontendArticleUrl(article.slug));
+                        context.push('/article/webview', extra: ApiConstants.getFrontendArticleUrl(article.slug, currentLang));
                       },
                     );
                   },

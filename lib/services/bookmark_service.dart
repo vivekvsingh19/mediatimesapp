@@ -19,6 +19,12 @@ class BookmarkService {
         'featuredImageUrl': article.featuredImageUrl,
         'publishedAt': article.publishedAt,
         'category': article.category != null ? {'id': article.category!.id, 'name': article.category!.name, 'slug': article.category!.slug} : null,
+        'translations': article.translations?.map((t) => {
+          'language': t.language,
+          'title': t.title,
+          'excerpt': t.excerpt,
+          'content': t.content,
+        }).toList(),
       };
       bookmarks.add(jsonEncode(map));
       await prefs.setStringList(_key, bookmarks);

@@ -9,7 +9,26 @@ class ApiConstants {
         connectTimeout: const Duration(seconds: 2),
         receiveTimeout: const Duration(seconds: 2),
       ));
-      final response = await dio.get('https://themediatimes.live/api/mobile/categories'); // Hit a fast endpoint
+      
+      // Try local dev server first (for Desktop/Web)
+      try {
+        final localResponse = await dio.get('http://localhost:3000/api/mobile/categories');
+        if (localResponse.statusCode != null && localResponse.statusCode! >= 200 && localResponse.statusCode! < 400) {
+          activeDomain = 'http://localhost:3000';
+          return;
+        }
+      } catch (_) {}
+
+      // Try Android Emulator local server
+      try {
+        final androidLocalResponse = await dio.get('http://10.0.2.2:3000/api/mobile/categories');
+        if (androidLocalResponse.statusCode != null && androidLocalResponse.statusCode! >= 200 && androidLocalResponse.statusCode! < 400) {
+          activeDomain = 'http://10.0.2.2:3000';
+          return;
+        }
+      } catch (_) {}
+      
+      final response = await dio.get('https://themediatimes.live/api/mobile/categories');
       if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 400) {
         activeDomain = 'https://themediatimes.live';
       } else {
@@ -30,7 +49,7 @@ class ApiConstants {
   static const String search = '/search';
   static const String ads = '/ads';
 
-  static String getFrontendArticleUrl(String slug) {
-    return '$activeDomain/en/article/$slug';
+  static String getFrontendArticleUrl(String slug, String lang) {
+    return '$activeDomain/$lang/article/$slug';
   }
 }

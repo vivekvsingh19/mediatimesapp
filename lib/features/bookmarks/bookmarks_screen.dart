@@ -42,7 +42,7 @@ class BookmarksScreen extends ConsumerWidget {
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                subtitle: article.category != null ? Text(article.category!.name) : null,
+                subtitle: article.category != null ? Text(article.category!.getLocalizedName(currentLang)) : null,
                 trailing: IconButton(
                   icon: const Icon(LucideIcons.trash2),
                   onPressed: () async {
@@ -51,7 +51,7 @@ class BookmarksScreen extends ConsumerWidget {
                   },
                 ),
                 onTap: () {
-                  context.push('/article/webview', extra: ApiConstants.getFrontendArticleUrl(article.slug));
+                  context.push('/article/webview', extra: ApiConstants.getFrontendArticleUrl(article.slug, currentLang));
                 },
               );
             },

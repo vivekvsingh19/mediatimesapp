@@ -54,7 +54,7 @@ class NewsCard extends ConsumerWidget {
       onTap: () {
         context.push(
           '/article/webview',
-          extra: ApiConstants.getFrontendArticleUrl(article.slug),
+          extra: ApiConstants.getFrontendArticleUrl(article.slug, currentLang),
         );
       },
       child: Container(
@@ -176,7 +176,7 @@ class NewsCard extends ConsumerWidget {
                               color: Theme.of(context).iconTheme.color?.withValues(alpha: 0.54) ?? Colors.black54,
                             ),
                             onPressed: () async {
-                              final url = ApiConstants.getFrontendArticleUrl(article.slug);
+                              final url = ApiConstants.getFrontendArticleUrl(article.slug, currentLang);
                               final shareText = '${AppStrings.get(currentLang, 'check_out')}${article.title}\n\n$url';
                               
                               if (article.featuredImageUrl != null) {

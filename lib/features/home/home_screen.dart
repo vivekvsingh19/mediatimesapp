@@ -80,7 +80,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               _pageController.jumpToPage(0);
                           },
                           child: Text(
-                            c.name,
+                            c.getLocalizedName(currentLang),
                             style: TextStyle(
                               color: isSelected ? Colors.red : Colors.white70,
                               fontSize: 16,
