@@ -21,9 +21,9 @@ class ApiClient {
     if (cacheStore != null) {
       cacheOptions = CacheOptions(
         store: cacheStore,
-        policy: CachePolicy.request, // Always fetch fresh, fallback to cache on error
+        policy: CachePolicy.forceCache, // Use cache if available to save server requests
         hitCacheOnErrorExcept: [401, 403],
-        maxStale: const Duration(hours: 4), // Cache for 4 hours
+        maxStale: const Duration(minutes: 10), // Cache remains valid for 10 minutes
         priority: CachePriority.normal,
         cipher: null,
         keyBuilder: CacheOptions.defaultCacheKeyBuilder,
