@@ -13,115 +13,171 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentLang = ref.watch(languageProvider);
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text(AppStrings.get(currentLang, 'settings').toUpperCase(), style: const TextStyle(fontWeight: FontWeight.w800, color: Colors.white)),
+        title: Text(
+          AppStrings.get(currentLang, 'settings').toUpperCase(),
+          style: const TextStyle(
+            fontWeight: FontWeight.w800,
+            color: Colors.white,
+          ),
+        ),
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              AppStrings.get(currentLang, 'language'),
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-              decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.grey.withValues(alpha: 0.3)),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  value: currentLang,
-                  isExpanded: true,
-                  icon: const Icon(LucideIcons.chevronDown),
-                  items: const [
-                    DropdownMenuItem(value: 'en', child: Text('English', style: TextStyle(fontSize: 16))),
-                    DropdownMenuItem(value: 'hi', child: Text('Hindi (हिंदी)', style: TextStyle(fontSize: 16))),
-                    DropdownMenuItem(value: 'mr', child: Text('Marathi (मराठी)', style: TextStyle(fontSize: 16))),
-                  ],
-                  onChanged: (String? newLang) {
-                    if (newLang != null) {
-                      ref.read(languageProvider.notifier).setLanguage(newLang);
-                    }
-                  },
-                ),
-              ),
-            ),
-            const SizedBox(height: 32),
-            Text(
-              AppStrings.get(currentLang, 'get_in_touch'),
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              AppStrings.get(currentLang, 'contact_desc'),
-              style: TextStyle(fontSize: 16, color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.8)),
-            ),
-            const SizedBox(height: 32),
-            _buildContactItem(
-              context,
-              icon: LucideIcons.globe,
-              title: AppStrings.get(currentLang, 'website'),
-              subtitle: 'https://themediatimes.live',
-            ),
-            const SizedBox(height: 16),
-            _buildContactItem(
-              context,
-              icon: LucideIcons.mail,
-              title: AppStrings.get(currentLang, 'email'),
-              subtitle: 'contact@themediatimes.live',
-            ),
-            const SizedBox(height: 32),
-            Text(
-              AppStrings.get(currentLang, 'follow_us'),
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(22),
+            topRight: Radius.circular(22),
+          ),
+        ),
+        child: ClipRRect(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(22),
+            topRight: Radius.circular(22),
+          ),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildSocialIcon(
-                  context,
-                  icon: LucideIcons.instagram,
-                  url: 'https://www.instagram.com/themediatimes.live?igsi=MW0xYWR5eDZzYzI0Mw==',
+                Text(
+                  AppStrings.get(currentLang, 'language'),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                const SizedBox(width: 16),
-                _buildSocialIcon(
-                  context,
-                  icon: LucideIcons.twitter,
-                  url: 'https://x.com/themediatimes_',
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: Colors.grey.withValues(alpha: 0.3),
+                    ),
+                  ),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: currentLang,
+                      isExpanded: true,
+                      icon: const Icon(LucideIcons.chevronDown),
+                      items: const [
+                        DropdownMenuItem(
+                          value: 'en',
+                          child: Text(
+                            'English',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: 'hi',
+                          child: Text(
+                            'Hindi (हिंदी)',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                        DropdownMenuItem(
+                          value: 'mr',
+                          child: Text(
+                            'Marathi (मराठी)',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ],
+                      onChanged: (String? newLang) {
+                        if (newLang != null) {
+                          ref
+                              .read(languageProvider.notifier)
+                              .setLanguage(newLang);
+                        }
+                      },
+                    ),
+                  ),
                 ),
-                const SizedBox(width: 16),
-                _buildSocialIcon(
-                  context,
-                  icon: LucideIcons.youtube,
-                  url: 'https://youtube.com/@themediatimes?si=h4-UkvSA1XE_1gUT',
+                const SizedBox(height: 32),
+                Text(
+                  AppStrings.get(currentLang, 'get_in_touch'),
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                const SizedBox(width: 16),
-                _buildSocialIcon(
+                const SizedBox(height: 16),
+                Text(
+                  AppStrings.get(currentLang, 'contact_desc'),
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(
+                      context,
+                    ).textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
+                  ),
+                ),
+                const SizedBox(height: 32),
+                _buildContactItem(
                   context,
-                  icon: LucideIcons.linkedin,
-                  url: 'https://www.linkedin.com/company/themediatimes/',
+                  icon: LucideIcons.globe,
+                  title: AppStrings.get(currentLang, 'website'),
+                  subtitle: 'https://themediatimes.live',
+                ),
+                const SizedBox(height: 16),
+                _buildContactItem(
+                  context,
+                  icon: LucideIcons.mail,
+                  title: AppStrings.get(currentLang, 'email'),
+                  subtitle: 'contact@themediatimes.live',
+                ),
+                const SizedBox(height: 32),
+                Text(
+                  AppStrings.get(currentLang, 'follow_us'),
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    _buildSocialIcon(
+                      context,
+                      icon: LucideIcons.instagram,
+                      url:
+                          'https://www.instagram.com/themediatimes.live?igsi=MW0xYWR5eDZzYzI0Mw==',
+                    ),
+                    const SizedBox(width: 16),
+                    _buildSocialIcon(
+                      context,
+                      icon: LucideIcons.twitter,
+                      url: 'https://x.com/themediatimes_',
+                    ),
+                    const SizedBox(width: 16),
+                    _buildSocialIcon(
+                      context,
+                      icon: LucideIcons.youtube,
+                      url:
+                          'https://youtube.com/@themediatimes?si=h4-UkvSA1XE_1gUT',
+                    ),
+                    const SizedBox(width: 16),
+                    _buildSocialIcon(
+                      context,
+                      icon: LucideIcons.linkedin,
+                      url: 'https://www.linkedin.com/company/themediatimes/',
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -152,7 +208,12 @@ class SettingsScreen extends ConsumerWidget {
               const SizedBox(height: 4),
               Text(
                 subtitle,
-                style: TextStyle(fontSize: 16, color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8)),
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Theme.of(
+                    context,
+                  ).textTheme.bodyMedium?.color?.withOpacity(0.8),
+                ),
               ),
             ],
           ),
@@ -161,7 +222,11 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSocialIcon(BuildContext context, {required IconData icon, required String url}) {
+  Widget _buildSocialIcon(
+    BuildContext context, {
+    required IconData icon,
+    required String url,
+  }) {
     return InkWell(
       onTap: () async {
         final uri = Uri.parse(url);

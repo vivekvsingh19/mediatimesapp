@@ -15,8 +15,8 @@ class NewsCardSkeleton extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).cardColor,
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
+          topLeft: Radius.circular(22),
+          topRight: Radius.circular(22),
         ),
         boxShadow: [
           BoxShadow(
@@ -28,8 +28,8 @@ class NewsCardSkeleton extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
+          topLeft: Radius.circular(22),
+          topRight: Radius.circular(22),
         ),
         child: Shimmer.fromColors(
           baseColor: baseColor,

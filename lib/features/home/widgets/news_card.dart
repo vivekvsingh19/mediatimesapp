@@ -62,8 +62,8 @@ class NewsCard extends ConsumerWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
           borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(16),
-            topRight: Radius.circular(16),
+            topLeft: Radius.circular(22),
+            topRight: Radius.circular(22),
           ),
           boxShadow: [
             BoxShadow(
@@ -75,8 +75,8 @@ class NewsCard extends ConsumerWidget {
         ),
         child: ClipRRect(
           borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(16),
-            topRight: Radius.circular(16),
+            topLeft: Radius.circular(22),
+            topRight: Radius.circular(22),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
