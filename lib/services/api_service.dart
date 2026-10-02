@@ -5,6 +5,7 @@ import '../core/constants/api_constants.dart';
 import '../models/article.dart';
 import '../models/category.dart';
 import '../models/video.dart';
+import '../models/ad.dart';
 
 class ApiService {
   final ApiClient _apiClient;
@@ -102,6 +103,18 @@ class ApiService {
           .toList();
     } catch (e) {
       throw Exception('Failed to search news: $e');
+    }
+  }
+
+  Future<List<AdModel>> getAds() async {
+    try {
+      final response = await _apiClient.dio.get(ApiConstants.ads);
+      final data = response.data as List;
+      return data.map((e) => AdModel.fromJson(e as Map<String, dynamic>)).toList();
+    } catch (e) {
+      // Don't throw for ads so it doesn't break the whole app if ads fail
+      print('Failed to load ads: $e');
+      return [];
     }
   }
 }
