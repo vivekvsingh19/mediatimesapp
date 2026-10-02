@@ -11,6 +11,8 @@ import '../../../providers/bookmark_provider.dart';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
+import '../../../providers/language_provider.dart';
+import '../../../core/constants/app_strings.dart';
 
 class NewsCard extends ConsumerWidget {
   final Article article;
@@ -45,6 +47,7 @@ class NewsCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currentLang = ref.watch(languageProvider);
     final isBookmarkedState = ref.watch(isBookmarkedProvider(article.id));
     final isBookmarked = isBookmarkedState.value ?? false;
     return GestureDetector(
@@ -174,7 +177,7 @@ class NewsCard extends ConsumerWidget {
                             ),
                             onPressed: () async {
                               final url = ApiConstants.getFrontendArticleUrl(article.slug);
-                              final shareText = 'Check out this article: ${article.title}\n\n$url';
+                              final shareText = '${AppStrings.get(currentLang, 'check_out')}${article.title}\n\n$url';
                               
                               if (article.featuredImageUrl != null) {
                                 try {
@@ -203,7 +206,7 @@ class NewsCard extends ConsumerWidget {
 
                       // Title
                       Text(
-                        article.title,
+                        article.getLocalizedTitle(currentLang),
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w800,
@@ -216,10 +219,10 @@ class NewsCard extends ConsumerWidget {
                       const SizedBox(height: 12),
 
                       // Description / Content
-                      if (article.content != null || article.excerpt != null)
+                      if (article.getLocalizedContent(currentLang) != null || article.getLocalizedExcerpt(currentLang) != null)
                         Expanded(
                           child: Text(
-                            _getCleanExcerpt(article.content ?? article.excerpt),
+                            _getCleanExcerpt(article.getLocalizedContent(currentLang) ?? article.getLocalizedExcerpt(currentLang)),
                             style: TextStyle(
                               fontSize: 16,
                               color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8),
@@ -237,7 +240,7 @@ class NewsCard extends ConsumerWidget {
 
                       // Footer
                       Text(
-                        '${article.publishedAt != null ? timeago.format(DateTime.parse(article.publishedAt!)) : 'Unknown'} • ${article.author?.name ?? 'The Media Times.Live'}',
+                        '${article.publishedAt != null ? timeago.format(DateTime.parse(article.publishedAt!), locale: currentLang) : AppStrings.get(currentLang, 'unknown')} • ${article.author?.name ?? 'The Media Times.Live'}',
                         style: TextStyle(
                           color: Theme.of(context).textTheme.bodySmall?.color?.withOpacity(0.6),
                           fontSize: 12,

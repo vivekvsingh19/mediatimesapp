@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/search_provider.dart';
+import '../../providers/language_provider.dart';
 import '../../core/constants/api_constants.dart';
+import '../../core/constants/app_strings.dart';
 
 class SearchScreen extends ConsumerStatefulWidget {
   const SearchScreen({super.key});
@@ -23,6 +25,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currentLang = ref.watch(languageProvider);
     final searchState = ref.watch(searchProvider(_query));
 
     return Scaffold(
@@ -30,8 +33,8 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         title: TextField(
           controller: _controller,
           autofocus: true,
-          decoration: const InputDecoration(
-            hintText: 'Search news...',
+          decoration: InputDecoration(
+            hintText: AppStrings.get(currentLang, 'search_hint'),
             border: InputBorder.none,
           ),
           onSubmitted: (value) {
@@ -54,11 +57,11 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
         ],
       ),
       body: _query.isEmpty
-          ? const Center(child: Text('Enter a search term'))
+          ? Center(child: Text(AppStrings.get(currentLang, 'enter_search')))
           : searchState.when(
               data: (articles) {
                 if (articles.isEmpty) {
-                  return const Center(child: Text('No results found.'));
+                  return Center(child: Text(AppStrings.get(currentLang, 'no_results')));
                 }
                 return ListView.separated(
                   itemCount: articles.length,
@@ -67,7 +70,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                     final article = articles[index];
                     return ListTile(
                       title: Text(
-                        article.title,
+                        article.getLocalizedTitle(currentLang),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(fontWeight: FontWeight.bold),
@@ -81,7 +84,7 @@ class _SearchScreenState extends ConsumerState<SearchScreen> {
                 );
               },
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, stack) => Center(child: Text('Error: $err')),
+              error: (err, stack) => Center(child: Text('${AppStrings.get(currentLang, 'error')}$err')),
             ),
     );
   }

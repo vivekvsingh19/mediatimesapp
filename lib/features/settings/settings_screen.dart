@@ -4,6 +4,7 @@ import 'package:lucide_icons/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../providers/language_provider.dart';
+import '../../core/constants/app_strings.dart';
 
 class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
@@ -14,7 +15,7 @@ class SettingsScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: const Text('Settings', style: TextStyle(color: Colors.white)),
+        title: Text(AppStrings.get(currentLang, 'settings'), style: const TextStyle(color: Colors.white)),
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
       ),
@@ -23,9 +24,9 @@ class SettingsScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Language / भाषा',
-              style: TextStyle(
+            Text(
+              AppStrings.get(currentLang, 'language'),
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -57,36 +58,36 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 32),
-            const Text(
-              'Get in Touch',
-              style: TextStyle(
+            Text(
+              AppStrings.get(currentLang, 'get_in_touch'),
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
             const SizedBox(height: 16),
             Text(
-              'If you have any questions, feedback, or concerns about our news content, please feel free to reach out to us using the contact information below.',
-              style: TextStyle(fontSize: 16, color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8)),
+              AppStrings.get(currentLang, 'contact_desc'),
+              style: TextStyle(fontSize: 16, color: Theme.of(context).textTheme.bodyMedium?.color?.withValues(alpha: 0.8)),
             ),
             const SizedBox(height: 32),
             _buildContactItem(
               context,
               icon: LucideIcons.globe,
-              title: 'Website',
+              title: AppStrings.get(currentLang, 'website'),
               subtitle: 'https://themediatimes.live',
             ),
             const SizedBox(height: 16),
             _buildContactItem(
               context,
               icon: LucideIcons.mail,
-              title: 'Email',
+              title: AppStrings.get(currentLang, 'email'),
               subtitle: 'contact@themediatimes.live',
             ),
             const SizedBox(height: 32),
-            const Text(
-              'Follow Us',
-              style: TextStyle(
+            Text(
+              AppStrings.get(currentLang, 'follow_us'),
+              style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),

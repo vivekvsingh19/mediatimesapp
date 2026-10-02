@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../../providers/news_provider.dart';
 import '../../providers/categories_provider.dart';
+import '../../providers/language_provider.dart';
+import '../../core/constants/app_strings.dart';
 import 'widgets/news_card.dart';
 import 'widgets/news_card_skeleton.dart';
 
@@ -25,6 +27,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currentLang = ref.watch(languageProvider);
     final newsState = ref.watch(newsProvider(_selectedCategorySlug));
 
     return Scaffold(
@@ -51,7 +54,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             _pageController.jumpToPage(0);
                         },
                         child: Text(
-                          'All',
+                          AppStrings.get(currentLang, 'all'),
                           style: TextStyle(
                             color: _selectedCategorySlug == null
                                 ? Colors.red
@@ -100,7 +103,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       body: newsState.when(
         data: (articles) {
           if (articles.isEmpty) {
-            return const Center(child: Text('No news available.'));
+            return Center(child: Text(AppStrings.get(currentLang, 'no_news')));
           }
           return RefreshIndicator(
             onRefresh: () => ref
@@ -149,13 +152,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Unable to load news: $err', textAlign: TextAlign.center),
+              Text('${AppStrings.get(currentLang, 'unable_to_load')}$err', textAlign: TextAlign.center),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () => ref
                     .read(newsProvider(_selectedCategorySlug).notifier)
                     .fetchNews(refresh: true),
-                child: const Text('Try Again'),
+                child: Text(AppStrings.get(currentLang, 'try_again')),
               ),
             ],
           ),

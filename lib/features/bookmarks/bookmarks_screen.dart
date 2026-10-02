@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/bookmark_provider.dart';
 import '../../core/constants/api_constants.dart';
+import '../../core/constants/app_strings.dart';
+import '../../providers/language_provider.dart';
 
 import 'package:lucide_icons/lucide_icons.dart';
 
@@ -11,12 +13,13 @@ class BookmarksScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final currentLang = ref.watch(languageProvider);
     final bookmarksState = ref.watch(bookmarksProvider);
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: const Text('SAVED', style: TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.2, color: Colors.white)),
+        title: Text(AppStrings.get(currentLang, 'saved'), style: const TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.2, color: Colors.white)),
         centerTitle: true,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
@@ -24,7 +27,7 @@ class BookmarksScreen extends ConsumerWidget {
       body: bookmarksState.when(
         data: (bookmarks) {
           if (bookmarks.isEmpty) {
-            return const Center(child: Text('No saved articles.'));
+            return Center(child: Text(AppStrings.get(currentLang, 'no_saved')));
           }
           return ListView.separated(
             itemCount: bookmarks.length,
@@ -34,7 +37,7 @@ class BookmarksScreen extends ConsumerWidget {
               return ListTile(
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 title: Text(
-                  article.title,
+                  article.getLocalizedTitle(currentLang),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(fontWeight: FontWeight.bold),
@@ -55,7 +58,7 @@ class BookmarksScreen extends ConsumerWidget {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(child: Text('Error: $err')),
+        error: (err, stack) => Center(child: Text('${AppStrings.get(currentLang, 'error')}$err')),
       ),
     );
   }

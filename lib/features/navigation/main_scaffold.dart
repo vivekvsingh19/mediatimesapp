@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:lucide_icons/lucide_icons.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../providers/language_provider.dart';
+import '../../core/constants/app_strings.dart';
 
-class MainScaffold extends StatelessWidget {
+class MainScaffold extends ConsumerWidget {
   final Widget child;
 
   const MainScaffold({super.key, required this.child});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentLang = ref.watch(languageProvider);
     return Scaffold(
       backgroundColor: Colors.black,
       body: child,
@@ -34,10 +38,10 @@ class MainScaffold extends StatelessWidget {
           unselectedItemColor: Colors.grey,
           showSelectedLabels: false,
           showUnselectedLabels: false,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(LucideIcons.home), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(LucideIcons.bookmark), label: 'Bookmarks'),
-            BottomNavigationBarItem(icon: Icon(LucideIcons.settings), label: 'Settings'),
+          items: [
+            BottomNavigationBarItem(icon: const Icon(LucideIcons.home), label: AppStrings.get(currentLang, 'home')),
+            BottomNavigationBarItem(icon: const Icon(LucideIcons.bookmark), label: AppStrings.get(currentLang, 'bookmarks')),
+            BottomNavigationBarItem(icon: const Icon(LucideIcons.settings), label: AppStrings.get(currentLang, 'settings')),
           ],
         ),
       ),

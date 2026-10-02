@@ -26,6 +26,29 @@ class ArticleAuthor {
   }
 }
 
+class ArticleTranslation {
+  final String language;
+  final String title;
+  final String? excerpt;
+  final String? content;
+
+  ArticleTranslation({
+    required this.language,
+    required this.title,
+    this.excerpt,
+    this.content,
+  });
+
+  factory ArticleTranslation.fromJson(Map<String, dynamic> json) {
+    return ArticleTranslation(
+      language: json['language'] as String,
+      title: json['title'] as String,
+      excerpt: json['excerpt'] as String?,
+      content: json['content'] as String?,
+    );
+  }
+}
+
 class Article {
   final int id;
   final String title;
@@ -38,6 +61,7 @@ class Article {
   final ArticleCategory? category;
   final ArticleAuthor? author;
   final List<Article>? relatedArticles;
+  final List<ArticleTranslation>? translations;
 
   Article({
     required this.id,
@@ -51,7 +75,26 @@ class Article {
     this.category,
     this.author,
     this.relatedArticles,
+    this.translations,
   });
+
+  String getLocalizedTitle(String langCode) {
+    if (langCode == 'en' || translations == null || translations!.isEmpty) return title;
+    final translation = translations!.where((t) => t.language == langCode).firstOrNull;
+    return translation?.title ?? title;
+  }
+
+  String? getLocalizedExcerpt(String langCode) {
+    if (langCode == 'en' || translations == null || translations!.isEmpty) return excerpt;
+    final translation = translations!.where((t) => t.language == langCode).firstOrNull;
+    return translation?.excerpt ?? excerpt;
+  }
+
+  String? getLocalizedContent(String langCode) {
+    if (langCode == 'en' || translations == null || translations!.isEmpty) return content;
+    final translation = translations!.where((t) => t.language == langCode).firstOrNull;
+    return translation?.content ?? content;
+  }
 
   factory Article.fromJson(Map<String, dynamic> json) {
     return Article(
@@ -71,6 +114,9 @@ class Article {
           : null,
       relatedArticles: (json['relatedArticles'] as List<dynamic>?)
           ?.map((e) => Article.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      translations: (json['translations'] as List<dynamic>?)
+          ?.map((e) => ArticleTranslation.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
   }

@@ -1,9 +1,16 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/article.dart';
 import '../services/api_service.dart';
+import '../core/network/api_client.dart';
+import '../main.dart';
 import 'language_provider.dart';
 
-final apiServiceProvider = Provider((ref) => ApiService());
+final apiServiceProvider = Provider((ref) {
+  final cacheStore = ref.watch(cacheStoreProvider);
+  final apiClient = ApiClient(cacheStore: cacheStore);
+  return ApiService(apiClient);
+});
+
 
 class NewsNotifier extends StateNotifier<AsyncValue<List<Article>>> {
   final ApiService apiService;
@@ -32,7 +39,13 @@ class NewsNotifier extends StateNotifier<AsyncValue<List<Article>>> {
 
     _isLoadingMore = true;
     try {
-      final newArticles = await apiService.getNews(page: _page, limit: 5, category: category, lang: lang);
+      final newArticles = await apiService.getNews(
+        page: _page, 
+        limit: 5, 
+        category: category, 
+        lang: lang,
+        forceRefresh: refresh, // Bypass cache if refresh is true
+      );
       if (newArticles.isEmpty) {
         _hasMore = false;
       } else {
@@ -51,6 +64,5 @@ class NewsNotifier extends StateNotifier<AsyncValue<List<Article>>> {
 }
 
 final newsProvider = StateNotifierProvider.family<NewsNotifier, AsyncValue<List<Article>>, String?>((ref, category) {
-  final lang = ref.watch(languageProvider);
-  return NewsNotifier(ref.read(apiServiceProvider), category: category, lang: lang);
+  return NewsNotifier(ref.read(apiServiceProvider), category: category, lang: 'all');
 });

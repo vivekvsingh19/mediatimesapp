@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:dio_cache_interceptor/dio_cache_interceptor.dart';
 import '../core/network/api_client.dart';
 import '../core/constants/api_constants.dart';
 import '../models/article.dart';
@@ -5,13 +7,16 @@ import '../models/category.dart';
 import '../models/video.dart';
 
 class ApiService {
-  final ApiClient _apiClient = ApiClient();
+  final ApiClient _apiClient;
+
+  ApiService(this._apiClient);
 
   Future<List<Article>> getNews({
     int page = 1,
     int limit = 10,
     String? category,
     String lang = 'en',
+    bool forceRefresh = false,
   }) async {
     try {
       final response = await _apiClient.dio.get(
@@ -22,6 +27,12 @@ class ApiService {
           'lang': lang,
           if (category != null) 'category': category
         },
+        options: forceRefresh ? Options(
+          extra: CacheOptions(
+            store: MemCacheStore(),
+            policy: CachePolicy.refreshForceCache,
+          ).toExtra(),
+        ) : null,
       );
 
       final data = response.data['data'] as List;
@@ -42,9 +53,18 @@ class ApiService {
     }
   }
 
-  Future<List<Category>> getCategories({String lang = 'en'}) async {
+  Future<List<Category>> getCategories({String lang = 'en', bool forceRefresh = false}) async {
     try {
-      final response = await _apiClient.dio.get(ApiConstants.categories, queryParameters: {'lang': lang});
+      final response = await _apiClient.dio.get(
+        ApiConstants.categories, 
+        queryParameters: {'lang': lang},
+        options: forceRefresh ? Options(
+          extra: CacheOptions(
+            store: MemCacheStore(),
+            policy: CachePolicy.refreshForceCache,
+          ).toExtra(),
+        ) : null,
+      );
       final data = response.data as List;
       return data
           .map((e) => Category.fromJson(e as Map<String, dynamic>))

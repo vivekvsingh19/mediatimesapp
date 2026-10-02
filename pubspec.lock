@@ -137,6 +137,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.11.0"
+  dio_cache_interceptor:
+    dependency: "direct main"
+    description:
+      name: dio_cache_interceptor
+      sha256: "1346705a2057c265014d7696e3e2318b560bfb00b484dac7f9b01e2ceaebb07d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.5.1"
+  dio_cache_interceptor_hive_store:
+    dependency: "direct main"
+    description:
+      name: dio_cache_interceptor_hive_store
+      sha256: "127cda24a485f5b6469172edd8b81fac819147318bedd654be167527c498bf55"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.0"
   dio_web_adapter:
     dependency: transitive
     description:
@@ -256,6 +272,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.3.3"
+  hive_ce:
+    dependency: transitive
+    description:
+      name: hive_ce
+      sha256: "2b1bf607ddf852cad8deaf2331cac0e54289d3a3c64079463b26f196008909ce"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.20.1"
   hooks:
     dependency: transitive
     description:
@@ -304,6 +328,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.20.3"
+  isolate_channel:
+    dependency: transitive
+    description:
+      name: isolate_channel
+      sha256: a9d3d620695bc984244dafae00b95e4319d6974b2d77f4b9e1eb4f2efe099094
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.6.1"
   jni:
     dependency: transitive
     description:

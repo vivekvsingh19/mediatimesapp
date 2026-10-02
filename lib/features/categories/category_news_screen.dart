@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/news_provider.dart';
+import '../../providers/language_provider.dart';
+import '../../core/constants/app_strings.dart';
 import '../home/widgets/news_card.dart';
 
 class CategoryNewsScreen extends ConsumerStatefulWidget {
@@ -28,6 +30,7 @@ class _CategoryNewsScreenState extends ConsumerState<CategoryNewsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final currentLang = ref.watch(languageProvider);
     final newsState = ref.watch(newsProvider(widget.categorySlug));
 
     return Scaffold(
@@ -44,7 +47,7 @@ class _CategoryNewsScreenState extends ConsumerState<CategoryNewsScreen> {
       body: newsState.when(
         data: (articles) {
           if (articles.isEmpty) {
-            return const Center(child: Text('No news available in this category.'));
+            return Center(child: Text(AppStrings.get(currentLang, 'no_news_category')));
           }
           return RefreshIndicator(
             onRefresh: () => ref.read(newsProvider(widget.categorySlug).notifier).fetchNews(refresh: true),
@@ -73,11 +76,11 @@ class _CategoryNewsScreenState extends ConsumerState<CategoryNewsScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Unable to load news: $err', textAlign: TextAlign.center),
+              Text('${AppStrings.get(currentLang, 'unable_to_load')}$err', textAlign: TextAlign.center),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () => ref.read(newsProvider(widget.categorySlug).notifier).fetchNews(refresh: true),
-                child: const Text('Try Again'),
+                child: Text(AppStrings.get(currentLang, 'try_again')),
               ),
             ],
           ),
