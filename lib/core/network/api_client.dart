@@ -4,6 +4,7 @@ import '../constants/api_constants.dart';
 
 class ApiClient {
   final Dio dio;
+  CacheOptions? cacheOptions;
 
   ApiClient({CacheStore? cacheStore})
       : dio = Dio(
@@ -16,20 +17,19 @@ class ApiClient {
               'Accept': 'application/json',
             },
           ),
-        ) {
+      ) {
     if (cacheStore != null) {
-      dio.interceptors.add(DioCacheInterceptor(
-        options: CacheOptions(
-          store: cacheStore,
-          policy: CachePolicy.forceCache, // Force cache if available
-          hitCacheOnErrorExcept: [401, 403],
-          maxStale: const Duration(hours: 4), // Cache for 4 hours
-          priority: CachePriority.normal,
-          cipher: null,
-          keyBuilder: CacheOptions.defaultCacheKeyBuilder,
-          allowPostMethod: false,
-        ),
-      ));
+      cacheOptions = CacheOptions(
+        store: cacheStore,
+        policy: CachePolicy.request, // Always fetch fresh, fallback to cache on error
+        hitCacheOnErrorExcept: [401, 403],
+        maxStale: const Duration(hours: 4), // Cache for 4 hours
+        priority: CachePriority.normal,
+        cipher: null,
+        keyBuilder: CacheOptions.defaultCacheKeyBuilder,
+        allowPostMethod: false,
+      );
+      dio.interceptors.add(DioCacheInterceptor(options: cacheOptions!));
     }
     
     dio.interceptors.add(LogInterceptor(

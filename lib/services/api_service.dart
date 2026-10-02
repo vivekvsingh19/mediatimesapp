@@ -27,12 +27,9 @@ class ApiService {
           'lang': lang,
           if (category != null) 'category': category
         },
-        options: forceRefresh ? Options(
-          extra: CacheOptions(
-            store: MemCacheStore(),
-            policy: CachePolicy.refreshForceCache,
-          ).toExtra(),
-        ) : null,
+        options: forceRefresh && _apiClient.cacheOptions != null 
+          ? _apiClient.cacheOptions!.copyWith(policy: CachePolicy.refreshForceCache).toOptions()
+          : null,
       );
 
       final data = response.data['data'] as List;
@@ -58,12 +55,9 @@ class ApiService {
       final response = await _apiClient.dio.get(
         ApiConstants.categories, 
         queryParameters: {'lang': lang},
-        options: forceRefresh ? Options(
-          extra: CacheOptions(
-            store: MemCacheStore(),
-            policy: CachePolicy.refreshForceCache,
-          ).toExtra(),
-        ) : null,
+        options: forceRefresh && _apiClient.cacheOptions != null 
+          ? _apiClient.cacheOptions!.copyWith(policy: CachePolicy.refreshForceCache).toOptions()
+          : null,
       );
       final data = response.data as List;
       return data
