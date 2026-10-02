@@ -137,7 +137,7 @@ class NewsCard extends ConsumerWidget {
                           ),
                           const SizedBox(width: 10),
                           Text(
-                            'The Media Times.Live',
+                            'TheMediaTimes.live',
                             style: TextStyle(
                               fontWeight: FontWeight.w900,
                               fontSize: 14,
