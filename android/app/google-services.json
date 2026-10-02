@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "343538346981",
+    "project_id": "mediatimes-c6be7",
+    "storage_bucket": "mediatimes-c6be7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:343538346981:android:3d556f3b8ce905808f5d0c",
+        "android_client_info": {
+          "package_name": "com.mediatimes.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCK5e8XGBCz0Ne12b-Lsgz_GBERolZ9wqY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

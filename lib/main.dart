@@ -8,6 +8,15 @@ import 'package:path_provider/path_provider.dart';
 import 'package:dio_cache_interceptor_hive_store/dio_cache_interceptor_hive_store.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'providers/language_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'firebase_options.dart';
+
+@pragma('vm:entry-point')
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  debugPrint("Handling a background message: ${message.messageId}");
+}
 
 // Create a provider for the cache store
 final cacheStoreProvider = Provider<HiveCacheStore>((ref) {
@@ -16,6 +25,22 @@ final cacheStoreProvider = Provider<HiveCacheStore>((ref) {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  
+  // Set up background messaging
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  
+  // Request permission (needed for iOS and Android 13+)
+  final messaging = FirebaseMessaging.instance;
+  await messaging.requestPermission();
+  
+  // Subscribe to the global news topic
+  await messaging.subscribeToTopic('all_news');
+
   await ApiConstants.init();
   final prefs = await SharedPreferences.getInstance();
   final dir = await getApplicationDocumentsDirectory();
