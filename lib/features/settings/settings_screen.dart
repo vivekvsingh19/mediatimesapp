@@ -12,6 +12,8 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final currentLang = ref.watch(languageProvider);
+    final theme = Theme.of(context);
+    
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -30,7 +32,7 @@ class SettingsScreen extends ConsumerWidget {
         width: double.infinity,
         height: double.infinity,
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
+          color: theme.scaffoldBackgroundColor,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(22),
             topRight: Radius.circular(22),
@@ -42,139 +44,138 @@ class SettingsScreen extends ConsumerWidget {
             topRight: Radius.circular(22),
           ),
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  AppStrings.get(currentLang, 'language'),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).cardColor,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: Colors.grey.withValues(alpha: 0.3),
+                _buildSectionHeader(AppStrings.get(currentLang, 'settings')),
+                
+                _buildCard(
+                  theme: theme,
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    leading: Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: theme.primaryColor.withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(LucideIcons.languages, color: theme.primaryColor),
+                    ),
+                    title: Text(
+                      AppStrings.get(currentLang, 'language'),
+                      style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    trailing: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: theme.cardColor,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.grey.withValues(alpha: 0.2)),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: currentLang,
+                          icon: const Icon(LucideIcons.chevronDown, size: 16),
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: theme.textTheme.bodyMedium?.color,
+                          ),
+                          items: const [
+                            DropdownMenuItem(value: 'en', child: Text('English')),
+                            DropdownMenuItem(value: 'hi', child: Text('Hindi')),
+                            DropdownMenuItem(value: 'mr', child: Text('Marathi')),
+                          ],
+                          onChanged: (String? newLang) {
+                            if (newLang != null) {
+                              ref.read(languageProvider.notifier).setLanguage(newLang);
+                            }
+                          },
+                        ),
+                      ),
                     ),
                   ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: currentLang,
-                      isExpanded: true,
-                      icon: const Icon(LucideIcons.chevronDown),
-                      items: const [
-                        DropdownMenuItem(
-                          value: 'en',
-                          child: Text(
-                            'English',
-                            style: TextStyle(fontSize: 16),
-                          ),
+                ),
+                
+                const SizedBox(height: 32),
+                _buildSectionHeader(AppStrings.get(currentLang, 'get_in_touch')),
+                
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16.0, left: 4.0),
+                  child: Text(
+                    AppStrings.get(currentLang, 'contact_desc'),
+                    style: TextStyle(
+                      fontSize: 15,
+                      height: 1.5,
+                      color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.7),
+                    ),
+                  ),
+                ),
+                
+                _buildCard(
+                  theme: theme,
+                  child: Column(
+                    children: [
+                      _buildContactTile(
+                        context: context,
+                        icon: LucideIcons.globe,
+                        title: AppStrings.get(currentLang, 'website'),
+                        subtitle: 'themediatimes.live',
+                        url: 'https://themediatimes.live',
+                      ),
+                      const Divider(height: 1, indent: 64),
+                      _buildContactTile(
+                        context: context,
+                        icon: LucideIcons.mail,
+                        title: AppStrings.get(currentLang, 'email'),
+                        subtitle: 'contact@themediatimes.live',
+                        url: 'mailto:contact@themediatimes.live',
+                      ),
+                    ],
+                  ),
+                ),
+                
+                const SizedBox(height: 32),
+                _buildSectionHeader(AppStrings.get(currentLang, 'follow_us')),
+                
+                _buildCard(
+                  theme: theme,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildSocialIcon(
+                          context,
+                          icon: LucideIcons.instagram,
+                          url: 'https://www.instagram.com/themediatimes.live?igsi=MW0xYWR5eDZzYzI0Mw==',
+                          color: const Color(0xFFE1306C),
                         ),
-                        DropdownMenuItem(
-                          value: 'hi',
-                          child: Text(
-                            'Hindi (हिंदी)',
-                            style: TextStyle(fontSize: 16),
-                          ),
+                        _buildSocialIcon(
+                          context,
+                          icon: LucideIcons.twitter,
+                          url: 'https://x.com/themediatimes_',
+                          color: const Color(0xFF1DA1F2),
                         ),
-                        DropdownMenuItem(
-                          value: 'mr',
-                          child: Text(
-                            'Marathi (मराठी)',
-                            style: TextStyle(fontSize: 16),
-                          ),
+                        _buildSocialIcon(
+                          context,
+                          icon: LucideIcons.youtube,
+                          url: 'https://youtube.com/@themediatimes?si=h4-UkvSA1XE_1gUT',
+                          color: const Color(0xFFFF0000),
+                        ),
+                        _buildSocialIcon(
+                          context,
+                          icon: LucideIcons.linkedin,
+                          url: 'https://www.linkedin.com/company/themediatimes/',
+                          color: const Color(0xFF0A66C2),
                         ),
                       ],
-                      onChanged: (String? newLang) {
-                        if (newLang != null) {
-                          ref
-                              .read(languageProvider.notifier)
-                              .setLanguage(newLang);
-                        }
-                      },
                     ),
                   ),
                 ),
-                const SizedBox(height: 32),
-                Text(
-                  AppStrings.get(currentLang, 'get_in_touch'),
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  AppStrings.get(currentLang, 'contact_desc'),
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Theme.of(
-                      context,
-                    ).textTheme.bodyMedium?.color?.withValues(alpha: 0.8),
-                  ),
-                ),
-                const SizedBox(height: 32),
-                _buildContactItem(
-                  context,
-                  icon: LucideIcons.globe,
-                  title: AppStrings.get(currentLang, 'website'),
-                  subtitle: 'https://themediatimes.live',
-                ),
-                const SizedBox(height: 16),
-                _buildContactItem(
-                  context,
-                  icon: LucideIcons.mail,
-                  title: AppStrings.get(currentLang, 'email'),
-                  subtitle: 'contact@themediatimes.live',
-                ),
-                const SizedBox(height: 32),
-                Text(
-                  AppStrings.get(currentLang, 'follow_us'),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    _buildSocialIcon(
-                      context,
-                      icon: LucideIcons.instagram,
-                      url:
-                          'https://www.instagram.com/themediatimes.live?igsi=MW0xYWR5eDZzYzI0Mw==',
-                    ),
-                    const SizedBox(width: 16),
-                    _buildSocialIcon(
-                      context,
-                      icon: LucideIcons.twitter,
-                      url: 'https://x.com/themediatimes_',
-                    ),
-                    const SizedBox(width: 16),
-                    _buildSocialIcon(
-                      context,
-                      icon: LucideIcons.youtube,
-                      url:
-                          'https://youtube.com/@themediatimes?si=h4-UkvSA1XE_1gUT',
-                    ),
-                    const SizedBox(width: 16),
-                    _buildSocialIcon(
-                      context,
-                      icon: LucideIcons.linkedin,
-                      url: 'https://www.linkedin.com/company/themediatimes/',
-                    ),
-                  ],
-                ),
+                
+                const SizedBox(height: 40),
               ],
             ),
           ),
@@ -183,42 +184,76 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildContactItem(
-    BuildContext context, {
+  Widget _buildSectionHeader(String title) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0, left: 4.0),
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w800,
+          letterSpacing: 0.5,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCard({required ThemeData theme, required Widget child}) {
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.cardColor,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
+          ),
+        ],
+        border: Border.all(color: Colors.grey.withValues(alpha: 0.1)),
+      ),
+      child: child,
+    );
+  }
+
+  Widget _buildContactTile({
+    required BuildContext context,
     required IconData icon,
     required String title,
     required String subtitle,
+    required String url,
   }) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(icon, size: 24, color: Theme.of(context).primaryColor),
-        const SizedBox(width: 16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                subtitle,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Theme.of(
-                    context,
-                  ).textTheme.bodyMedium?.color?.withOpacity(0.8),
-                ),
-              ),
-            ],
-          ),
+    final theme = Theme.of(context);
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      leading: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: theme.primaryColor.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(12),
         ),
-      ],
+        child: Icon(icon, color: theme.primaryColor),
+      ),
+      title: Text(
+        title,
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+      ),
+      subtitle: Text(
+        subtitle,
+        style: TextStyle(
+          fontSize: 14,
+          color: theme.textTheme.bodyMedium?.color?.withValues(alpha: 0.6),
+        ),
+      ),
+      trailing: const Icon(LucideIcons.chevronRight, size: 18, color: Colors.grey),
+      onTap: () async {
+        final uri = Uri.parse(url);
+        try {
+          await launchUrl(uri, mode: LaunchMode.externalApplication);
+        } catch (e) {
+          debugPrint('Could not launch $url');
+        }
+      },
     );
   }
 
@@ -226,6 +261,7 @@ class SettingsScreen extends ConsumerWidget {
     BuildContext context, {
     required IconData icon,
     required String url,
+    required Color color,
   }) {
     return InkWell(
       onTap: () async {
@@ -236,14 +272,14 @@ class SettingsScreen extends ConsumerWidget {
           debugPrint('Could not launch $url');
         }
       },
-      borderRadius: BorderRadius.circular(24),
+      borderRadius: BorderRadius.circular(16),
       child: Container(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor.withOpacity(0.1),
-          shape: BoxShape.circle,
+          color: color.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(16),
         ),
-        child: Icon(icon, color: Theme.of(context).primaryColor, size: 28),
+        child: Icon(icon, color: color, size: 26),
       ),
     );
   }
