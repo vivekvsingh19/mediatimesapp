@@ -36,8 +36,11 @@ class AdSlot extends ConsumerWidget {
         ),
         child: adsState.when(
           data: (ads) {
-            // Filter by active and optionally position (for now just take active mobile ads)
-            final validAds = ads.where((ad) => ad.mobileImageUrl != null).toList();
+            final validAds = ads.where((ad) => 
+                ad.position == 'mobile_feed' && 
+                ad.mobileImageUrl != null && 
+                ad.mobileImageUrl!.isNotEmpty
+            ).toList();
             if (validAds.isEmpty) {
               return _buildPlaceholder(context);
             }
