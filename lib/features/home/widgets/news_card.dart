@@ -13,6 +13,7 @@ import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../../providers/language_provider.dart';
 import '../../../core/constants/app_strings.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class NewsCard extends ConsumerWidget {
   final Article article;
@@ -207,8 +208,8 @@ class NewsCard extends ConsumerWidget {
                       // Title
                       Text(
                         article.getLocalizedTitle(currentLang),
-                        style: TextStyle(
-                          fontSize: 22,
+                        style: GoogleFonts.mukta(
+                          fontSize: 24,
                           fontWeight: FontWeight.w800,
                           height: 1.25,
                           color: Theme.of(context).textTheme.titleLarge?.color,
@@ -223,11 +224,11 @@ class NewsCard extends ConsumerWidget {
                         Expanded(
                           child: Text(
                             _getCleanExcerpt(article.getLocalizedContent(currentLang) ?? article.getLocalizedExcerpt(currentLang)),
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.8),
+                            style: GoogleFonts.mukta(
+                              fontSize: 18,
+                              color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.85),
                               height: 1.5,
-                              fontWeight: FontWeight.w400,
+                              fontWeight: FontWeight.w500,
                             ),
                             maxLines: 6,
                             overflow: TextOverflow.ellipsis,
