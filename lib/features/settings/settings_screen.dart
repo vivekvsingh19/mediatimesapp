@@ -15,7 +15,7 @@ class SettingsScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text(AppStrings.get(currentLang, 'settings'), style: const TextStyle(color: Colors.white)),
+        title: Text(AppStrings.get(currentLang, 'settings').toUpperCase(), style: const TextStyle(fontWeight: FontWeight.w800, color: Colors.white)),
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
       ),

@@ -25,6 +25,7 @@ class AppStrings {
       'no_saved': 'No saved articles.',
       'check_out': 'Check out this article: ',
       'unknown': 'Unknown',
+      'explore': 'EXPLORE',
     },
     'hi': {
       'settings': 'सेटिंग्स',
@@ -51,6 +52,7 @@ class AppStrings {
       'no_saved': 'कोई सहेजा गया लेख नहीं है।',
       'check_out': 'यह लेख देखें: ',
       'unknown': 'अज्ञात',
+      'explore': 'खोजें',
     },
     'mr': {
       'settings': 'सेटिंग्ज',
@@ -73,10 +75,11 @@ class AppStrings {
       'videos': 'व्हिडिओ',
       'no_videos': 'कोणतेही व्हिडिओ उपलब्ध नाहीत.',
       'no_news_category': 'या श्रेणीत कोणत्याही बातम्या उपलब्ध नाहीत.',
-      'saved': 'सेव्ह केलेले',
-      'no_saved': 'कोणतेही सेव्ह केलेले लेख नाहीत.',
+      'saved': 'सेव्ह केलेल्या बातम्या',
+      'no_saved': 'तुम्ही अद्याप कोणत्याही बातम्या सेव्ह केलेल्या नाहीत.',
       'check_out': 'हा लेख पहा: ',
       'unknown': 'अज्ञात',
+      'explore': 'शोधा',
     },
   };
 

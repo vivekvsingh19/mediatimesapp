@@ -6,8 +6,8 @@ class ApiConstants {
   static Future<void> init() async {
     try {
       final dio = Dio(BaseOptions(
-        connectTimeout: const Duration(seconds: 2),
-        receiveTimeout: const Duration(seconds: 2),
+        connectTimeout: const Duration(seconds: 5),
+        receiveTimeout: const Duration(seconds: 5),
       ));
       
       // Try local dev server first (for Desktop/Web)
@@ -28,14 +28,10 @@ class ApiConstants {
         }
       } catch (_) {}
       
-      final response = await dio.get('https://themediatimes.live/api/mobile/categories');
-      if (response.statusCode != null && response.statusCode! >= 200 && response.statusCode! < 400) {
-        activeDomain = 'https://themediatimes.live';
-      } else {
-        activeDomain = 'https://mediatimeslive.vercel.app';
-      }
+      // Default to live domain if local fails
+      activeDomain = 'https://themediatimes.live';
     } catch (e) {
-      activeDomain = 'https://mediatimeslive.vercel.app';
+      activeDomain = 'https://themediatimes.live';
     }
   }
 

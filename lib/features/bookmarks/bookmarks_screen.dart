@@ -19,7 +19,7 @@ class BookmarksScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text(AppStrings.get(currentLang, 'saved'), style: const TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.2, color: Colors.white)),
+        title: Text(AppStrings.get(currentLang, 'saved').toUpperCase(), style: const TextStyle(fontWeight: FontWeight.w800, color: Colors.white)),
         centerTitle: true,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
@@ -40,7 +40,10 @@ class BookmarksScreen extends ConsumerWidget {
                   article.getLocalizedTitle(currentLang),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                  ),
                 ),
                 subtitle: article.category != null ? Text(article.category!.getLocalizedName(currentLang)) : null,
                 trailing: IconButton(

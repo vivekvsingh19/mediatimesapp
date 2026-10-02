@@ -16,7 +16,7 @@ class CategoriesScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: Colors.grey[50],
       appBar: AppBar(
-        title: Text(AppStrings.get(currentLang, 'explore').toUpperCase(), style: const TextStyle(fontWeight: FontWeight.w900, letterSpacing: 1.2)),
+        title: Text(AppStrings.get(currentLang, 'explore').toUpperCase(), style: const TextStyle(fontWeight: FontWeight.w800)),
         centerTitle: true,
         elevation: 0,
         scrolledUnderElevation: 0,
@@ -44,9 +44,8 @@ class CategoriesScreen extends ConsumerWidget {
                 title: Text(
                   localizedName.toUpperCase(),
                   style: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 15,
-                    letterSpacing: 1.2,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
                     color: Colors.black87,
                   ),
                 ),
