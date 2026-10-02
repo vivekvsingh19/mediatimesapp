@@ -7,6 +7,7 @@ import '../../providers/language_provider.dart';
 import '../../core/constants/app_strings.dart';
 import 'widgets/news_card.dart';
 import 'widgets/news_card_skeleton.dart';
+import 'widgets/ad_slot.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -50,8 +51,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           setState(() {
                             _selectedCategorySlug = null;
                           });
-                          if (_pageController.hasClients)
+                          if (_pageController.hasClients) {
                             _pageController.jumpToPage(0);
+                          }
                         },
                         child: Text(
                           AppStrings.get(currentLang, 'all'),
@@ -76,8 +78,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             setState(() {
                               _selectedCategorySlug = c.slug;
                             });
-                            if (_pageController.hasClients)
+                            if (_pageController.hasClients) {
                               _pageController.jumpToPage(0);
+                            }
                           },
                           child: Text(
                             c.getLocalizedName(currentLang),
@@ -105,6 +108,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           if (articles.isEmpty) {
             return Center(child: Text(AppStrings.get(currentLang, 'no_news')));
           }
+          final int adFrequency = 5;
+          final int adCount = articles.length ~/ adFrequency;
+          
           return RefreshIndicator(
             onRefresh: () => ref
                 .read(newsProvider(_selectedCategorySlug).notifier)
@@ -112,24 +118,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: PageView.builder(
               controller: _pageController,
               scrollDirection: Axis.vertical,
-              itemCount: articles.length + 1,
+              itemCount: articles.isEmpty ? 0 : articles.length + adCount + 1,
               onPageChanged: (index) {
+                final articleIndex = index - (index ~/ (adFrequency + 1));
                 // Trigger fetch when 2 cards away since we load 5 at a time
-                if (index >= articles.length - 2) {
+                if (articleIndex >= articles.length - 2) {
                   ref
                       .read(newsProvider(_selectedCategorySlug).notifier)
                       .fetchNews();
                 }
               },
               itemBuilder: (context, index) {
-                if (index >= articles.length) {
+                final isAdIndex = (index + 1) % (adFrequency + 1) == 0;
+                
+                if (isAdIndex) {
+                  return const AdSlot(position: 'feed');
+                }
+
+                final articleIndex = index - (index ~/ (adFrequency + 1));
+
+                if (articleIndex >= articles.length) {
                   return const NewsCardSkeleton();
                 }
 
                 // Preload the next 3 articles' images for maximum smoothness
                 for (int i = 1; i <= 3; i++) {
-                  if (index + i < articles.length) {
-                    final nextArticle = articles[index + i];
+                  if (articleIndex + i < articles.length) {
+                    final nextArticle = articles[articleIndex + i];
                     if (nextArticle.featuredImageUrl != null) {
                       precacheImage(
                         CachedNetworkImageProvider(
@@ -141,7 +156,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   }
                 }
 
-                final article = articles[index];
+                final article = articles[articleIndex];
                 return NewsCard(article: article);
               },
             ),
