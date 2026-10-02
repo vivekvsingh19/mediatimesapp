@@ -64,5 +64,6 @@ class NewsNotifier extends StateNotifier<AsyncValue<List<Article>>> {
 }
 
 final newsProvider = StateNotifierProvider.family<NewsNotifier, AsyncValue<List<Article>>, String?>((ref, category) {
-  return NewsNotifier(ref.read(apiServiceProvider), category: category, lang: 'all');
+  final currentLang = ref.watch(languageProvider);
+  return NewsNotifier(ref.read(apiServiceProvider), category: category, lang: currentLang);
 });

@@ -7,5 +7,6 @@ import 'language_provider.dart';
 final searchProvider = FutureProvider.family<List<Article>, String>((ref, query) async {
   if (query.isEmpty) return [];
   final apiService = ref.read(apiServiceProvider);
-  return apiService.searchNews(query, lang: 'all');
+  final currentLang = ref.watch(languageProvider);
+  return apiService.searchNews(query, lang: currentLang);
 });
